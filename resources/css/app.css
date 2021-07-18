@@ -1,0 +1,82 @@
+body{
+    background-color: azure;
+}
+
+.cor{
+    background-color: white;
+}
+
+.home{
+    width: 65%;
+}
+
+.perfil{
+    width: 20%;
+    height: 20rem;
+}
+
+.cartao{
+    width: 20%;
+    margin-left: 1rem;
+    -webkit-box-shadow: 9px 7px 5px rgba(50, 50, 50, 0.77);
+	-moz-box-shadow:    9px 7px 5px rgba(50, 50, 50, 0.288);
+	box-shadow:         9px 7px 5px rgba(50, 50, 50, 0.226);
+}
+
+.alt-card{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.cor-cartao1{
+    background-color: rgb(118, 206, 125);
+    box-shadow: 2rem;
+}
+
+.cor-cartao2{
+    background-color: rgb(110, 127, 202);
+    box-shadow: 2rem;
+}
+
+.cor-cartao3{
+    background-color: rgb(179, 132, 115);
+}
+
+.style-card{
+    font-size: 2rem;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    float: left;
+    top: 50%;
+ 
+    /* flex para alinhar conteúdo*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.style-card:hover{
+    color: white;
+}
+
+.listagem-chamados{
+    height: 30rem;
+}
+
+.voltar{
+    color: black;
+    top: 42px;
+    position: relative;
+    text-decoration: none;
+    justify-content: center;
+}
+
+.n-chamado{
+    width: 75%;
+}
+
+.login{
+    width: 25%;
+}
