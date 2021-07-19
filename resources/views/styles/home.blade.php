@@ -10,11 +10,11 @@
     <title>@yield('title')</title>
 </head>
 <body>
-    @if (Request::segment(1) != 'login')
+    @if (Request::segment(1) != '')
         <div class="home cor mt-5 container-fluid shadow p-3 mb-5 bg-body rounded">
             <div class="mb-4">
-                @if(Request::segment(1) != '' && Request::segment(1) != 'login')
-                    <a class="voltar" href="/"><i class="fas fa-arrow-circle-left fa-2x"></i></a>
+                @if(Request::segment(1) != '' && Request::segment(1) != 'home')
+                    <a class="voltar" href="/home"><i class="fas fa-arrow-circle-left fa-2x"></i></a>
                 @endif
                 
                 <h1 class="display-6 text-center">@yield('name')</h1>
