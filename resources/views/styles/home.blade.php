@@ -10,7 +10,7 @@
     <title>@yield('title')</title>
 </head>
 <body>
-    @if (Request::segment(1) != '')
+    @if (Request::segment(1) == '')
         <div class="home cor mt-5 container-fluid shadow p-3 mb-5 bg-body rounded">
             <div class="mb-4">
                 @if(Request::segment(1) != '' && Request::segment(1) != 'home')

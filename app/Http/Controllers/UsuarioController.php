@@ -6,12 +6,30 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class UsuarioController extends Controller
-{
-    public function login(LoginRequest $request)
-    {
+class UsuarioController extends Controller{
 
-        $login = $request->loginemail;  
+    public function login()
+    {
+        if(session()->has('usuario')){
+            echo 'Está Logado';
+        } else{
+            return redirect()-> route('loginUser');
+        }
+
+    }
+
+    public function loginUser()
+    {
+        return view('login');
+    }
+}
+
+
+
+
+
+
+       /*  $login = $request->loginemail;  
         $senha = $request->loginpassword;
 
         $usuarios = User::where('email', '=', $login)->where('password', '=', $senha)->first();
@@ -49,5 +67,5 @@ class UsuarioController extends Controller
             ];
         }
         return redirect()->route('login', $data);
-    }
-}
+    }*/
+

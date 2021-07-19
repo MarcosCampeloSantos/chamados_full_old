@@ -22,7 +22,7 @@
           <p>{{$erro}}</p>
         </div>
         @endif
-        <form action="{{route('logar.usuario')}}" method="POST">
+        <form action="{{route('login')}}" method="POST">
             @csrf
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">E-mail</label>

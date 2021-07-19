@@ -15,22 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', HomeController::class) -> name('login');
-
-Route::get('/acompanhar', function () {
-    return view('acompanhar');
-});
-
-Route::get('/criar', function () {
-    return view('criar');
-});
-
-Route::get('/home', function () {
-    return view('index');
-}) -> name('home');
-
-Route::get('/criar-user', function(){
-    return view('admin.usuarios');
-});
-
-Route::post('home', [UsuarioController::class, 'login'])->name('logar.usuario');
+Route::get('/', 'usuariocontroller@login')->name('login');
+Route::get('/loginUser', 'usuariocontroller@loginUser')->name('loginUser');
