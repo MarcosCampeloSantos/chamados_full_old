@@ -15,5 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'usuariocontroller@login')->name('login');
+
+Route::get('/', 'usuariocontroller@loginUser')->name('index');
+
 Route::get('/loginUser', 'usuariocontroller@loginUser')->name('loginUser');
+Route::get('/homeUser', 'usuariocontroller@homeUser')->name('homeUser');
+
+
+Route::post('/login', 'usuariocontroller@login')->name('login');
+Route::get('/criar', 'usuariocontroller@usuarios')->name('usuarios');
+
+Route::post('criar_user', 'usuariocontroller@criar')->name('criar_user');

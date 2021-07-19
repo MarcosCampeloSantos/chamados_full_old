@@ -5,27 +5,27 @@
 
 @section('content')
 <div class="n-chamado mx-auto mb-3">
-    <form>
+    <form action="{{route('criar_user')}}" method="POST">
+        @csrf
         <div class="mb-3">
-            <label class="form-label">Topicos</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Selecione um Topico de Suporte</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <label class="form-label">Nivel</label>
+            <select class="form-select" name="nivel_user" aria-label="Default select example">
+                <option selected>Selecione Nivel do Usuario</option>
+                <option value="1">Admin</option>
+                <option value="2">Usuario</option>
             </select>
         </div>
         <div class="mb-3">
-            <label class="form-label">Tutulo</label>
-            <input type="email" class="form-control" id="titulo" placeholder="Digite o Titulo">
+            <label class="form-label">Nome</label>
+            <input type="text" class="form-control" name="cria_nome" id="cria_email" placeholder="Digite o Nome">
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Conteudo</label>
-            <textarea class="form-control" id="conteudo" rows="3" placeholder="Digite o Assunto"></textarea>
+            <label class="form-label">E-mail</label>
+            <input type="email" class="form-control" name="cria_email" id="cria_email" placeholder="Digite o E-mail">
         </div>
         <div class="mb-3">
-            <label for="formFile" class="form-label">Anexo</label>
-            <input class="form-control" type="file" id="formFile">
+            <label class="form-label">Senha</label>
+            <input type="password" class="form-control" name="cria_senha" id="cria_senha" placeholder="Digite a Senha">
         </div>
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Enviar</button>
