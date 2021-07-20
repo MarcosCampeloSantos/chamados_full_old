@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'usuariocontroller@loginUser')->name('loginUser'); #Tela de Login
 Route::get('/homeUser', 'usuariocontroller@homeUser')->name('homeUser'); #Tela Home Usuario
 Route::get('/criar', 'usuariocontroller@usuarios')->name('usuarios'); #Tela Criação de Usuario
+Route::get('/criar_chamados','usuariocontroller@criarChamado')->name('criarChamado'); #Tela Criação de Chamados
+Route::get('/acompanhar','usuariocontroller@acompanharChamados')->name('acompanhar'); #Tela de acompanhamento de Chamados
+Route::get('/homeAdm','usuariocontroller@homeAdm')->name('homeAdm'); #Tela de acompanhamento de Chamados
 
 #----POST-------
 Route::post('criar_user', 'usuariocontroller@criar')->name('criar_user'); #Verificação de Criação de Usuario

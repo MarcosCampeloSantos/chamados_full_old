@@ -11,20 +11,25 @@
 </head>
 <body>
     @if (Request::segment(1) != '')
-        <div class="home cor mt-5 container-fluid shadow p-3 mb-5 bg-body rounded">
-            <div class="mb-4">
-                @if(Request::segment(1) != '' && Request::segment(1) != 'homeUser')
-                    <a class="voltar" href="{{route('homeUser')}}"><i class="fas fa-arrow-circle-left fa-2x"></i></a>
-                @endif
-                
-                <h1 class="display-6 text-center">@yield('name')</h1>
+        <div class="camada mx-auto">
+            <div class="home mx-auto cor mt-5 shadow p-3 mb-5 bg-body rounded">
+                <div class="mb-4">
+                    @if(Request::segment(1) != '' && Request::segment(1) != 'homeUser' && Request::segment(1) != 'homeAdm')
+                        <a class="voltar" href="{{url()->previous()}}"><i class="fas fa-arrow-circle-left fa-2x"></i></a>
+                    @endif
+                    
+                    <h1 class="display-6 text-center">@yield('name')</h1>
+                </div>
+                @yield('content')
             </div>
-            @yield('content')
+            @endif
+            @yield('login')
+            <footer class="footer navbar-fixed-bottom text-center">
+                <p>&copy;Chamados 2021</p>
+            </footer>
         </div>
-    @endif
-    @yield('login')
-    <footer class="footer navbar-fixed-bottom text-center">
-        <p>&copy;Chamados 2021</p>
-    </footer>
+    
+    
+    
 </body>
 </html>
