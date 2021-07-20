@@ -14,15 +14,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+#----GET-------
+Route::get('/', 'usuariocontroller@loginUser')->name('loginUser'); #Tela de Login
+Route::get('/homeUser', 'usuariocontroller@homeUser')->name('homeUser'); #Tela Home Usuario
+Route::get('/criar', 'usuariocontroller@usuarios')->name('usuarios'); #Tela Criação de Usuario
 
-
-Route::get('/', 'usuariocontroller@loginUser')->name('index');
-
-Route::get('/loginUser', 'usuariocontroller@loginUser')->name('loginUser');
-Route::get('/homeUser', 'usuariocontroller@homeUser')->name('homeUser');
-
-
-Route::post('/login', 'usuariocontroller@login')->name('login');
-Route::get('/criar', 'usuariocontroller@usuarios')->name('usuarios');
-
-Route::post('criar_user', 'usuariocontroller@criar')->name('criar_user');
+#----POST-------
+Route::post('criar_user', 'usuariocontroller@criar')->name('criar_user'); #Verificação de Criação de Usuario
+Route::post('/login', 'usuariocontroller@login')->name('login'); #Verificação de Login

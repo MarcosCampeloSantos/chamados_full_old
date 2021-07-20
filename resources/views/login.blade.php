@@ -6,20 +6,20 @@
 
 @section('login')
 <div class="login cor mt-5 container-fluid shadow p-3 mb-5 bg-body rounded">
-    <div class="mb-3 w-50 mx-auto">
+    <div class="mb-3 mx-auto">
         <h1 class="display-6 text-center">Login</h1>
+        {{--Erros de Validação--}}
         @if ($errors->any())
         <div class="alert alert-danger" role="alert">
-          <ul>
-            @foreach ($errors->all() as $item)
-              <li>{{$item}}</li>
-            @endforeach
-          </ul>
+          @foreach ($errors->all() as $item)
+            <li>{{$item}}</li>
+          @endforeach
         </div>
+        {{--Erros de Login--}}
         @endif
         @if (isset($erro))
         <div class="alert alert-danger" role="alert">
-          <p>{{$erro}}</p>
+          <li>{{$erro}}</li>
         </div>
         @endif
         <form action="{{route('login')}}" method="POST">

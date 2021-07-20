@@ -6,14 +6,22 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Models\Nivel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller{
 
     public function login(LoginRequest $request)
     {
+
+        
+
+        if($this->checarSessao()){
+            return redirect()->route('homeUser');
+        }
+
         $login = $request->loginemail;  
         $senha = $request->loginpassword;
-
+        
         $usuarios = User::where('email', '=', $login)->where('password', '=', $senha)->first();
 
         if(@$usuarios->id != null){
@@ -23,20 +31,56 @@ class UsuarioController extends Controller{
             $_SESSION['nivel_usuario'] = $usuarios->nivel;
         
 
-            if($_SESSION['nivel_usuario']=='2'){
-                return redirect()->route('homeUser');
+            if($_SESSION['nivel_usuario']=='1'){
+                return redirect()->route('painelAdm');
+            }else{
+                return redirect()->route('HomeUser');
             }
-        }else{
-            echo "<script>alert('Algo Errado')</script>";
+        }elseif(User::where('email', '!=', $login)->first()){
+            session()->flash('erro', 'Usuario Não Existe');
             return redirect()->route('loginUser');
-
+        }elseif(!Hash::check($senha, @$usuarios->password)){
+            session()->flash('erro', 'Senha Incorreta');
+            return redirect()->route('loginUser');
         }
 
+        
+
+    }
+
+    private function checarSessao()
+    {
+        return session()->has('id_usuario');
+    }
+
+    public function criar(Request $request)
+    {
+        $usuario = new User;
+        $usuario ->name = $request->cria_nome;
+        $usuario ->email = $request->cria_email;
+        $usuario ->password = Hash::make($request->cria_senha);
+        $usuario ->nivel = $request->nivel_user;
+
+        $usuario->save();
+        
+        return redirect()->route('loginUser');
     }
 
     public function loginUser()
     {
-        return view('login');
+        if($this->checarSessao()){
+            return redirect()->route('homeUser');
+        }
+
+        $erro = session('erro');
+        $data = [];
+        if(!empty($erro)){
+            $data = [
+                'erro' => $erro
+            ];
+        }
+
+        return view('login', $data);
     }
 
     public function homeUser()  
@@ -47,19 +91,6 @@ class UsuarioController extends Controller{
     public function usuarios()
     {
         return view('admin.usuarios');
-    }
-
-    public function criar(Request $request)
-    {
-        $usuario = new User;
-        $usuario ->name = $request->cria_nome;
-        $usuario ->email = $request->cria_email;
-        $usuario ->password = $request->cria_senha;
-        $usuario ->nivel = $request->nivel_user;
-
-        $usuario->save();
-        
-        return redirect()->route('loginUser');
     }
 }
 
