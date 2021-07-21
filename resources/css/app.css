@@ -2,6 +2,15 @@ body{
     background-color: azure;
 }
 
+a{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    color: rgb(101, 101, 189);
+}
+
 .cor{
     background-color: white;
 }
@@ -65,6 +74,10 @@ body{
     height: 30rem;
 }
 
+.listagem-dp{
+    height: 13rem;
+}
+
 .voltar{
     color: black;
     top: 42px;
@@ -84,6 +97,7 @@ body{
 .camada{
     width: 90rem;
 }
+
 
 
 

@@ -15,7 +15,8 @@ class CreateSuportesTable extends Migration
     {
         Schema::create('suportes', function (Blueprint $table) {
             $table->id()->unique();
-            $table->string('suporte');
+            $table->string('departamento');
+            $table->string('topicos');
             $table->timestamps();
         });
     }
