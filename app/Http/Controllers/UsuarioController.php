@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
-use App\Models\Nivel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller{
 
@@ -18,14 +16,10 @@ class UsuarioController extends Controller{
         $usuarios = User::where('email', '=', $login)->where('password', '=', $senha)->first();
 
         if(@$usuarios->email == $login && @$usuarios->password == $senha){
-            @session_start();
-            $_SESSION['id_usuario'] = $usuarios->id;
-            $_SESSION['nome_usuario'] = $usuarios->name;
-            $_SESSION['nivel_usuario'] = $usuarios->nivel;
-        
+            session()->put('usuario', @$usuarios->email);
 
-            if($_SESSION['nivel_usuario']=='1'){
-                return redirect()->route('painelAdm');
+            if(@$usuarios->nivel =='1'){
+                return redirect()->route('homeAdm');
             }else{
                 return redirect()->route('homeUser');
             }
@@ -36,14 +30,11 @@ class UsuarioController extends Controller{
             session()->flash('erro', 'Senha Incorreta');
             return redirect()->route('loginUser');
         }
-
-        
-
     }
 
     private function checarSessao()
     {
-        return session()->has('id_usuario');
+        return session()->has('usuario');
     }
 
     public function criar(Request $request)
@@ -77,28 +68,53 @@ class UsuarioController extends Controller{
 
     public function homeUser()  
     {
-        return view('index');
+        if($this->checarSessao()){
+            return view('index');
+        }else{
+            return redirect()->route('loginUser');
+        }
+        
     }
 
     public function homeAdm()
     {
-        return view('admin.indexadm');
+        if($this->checarSessao()){
+            return view('admin.indexadm');
+        }else{
+            return redirect()->route('loginUser');
+        }
+        
     }
 
     public function usuarios()
     {
-        $users = User::all();
-        return view('admin.usuarios',['users'=>$users]);
+        if($this->checarSessao()){
+            $users = User::all();
+            return view('admin.usuarios',['users'=>$users]);
+        }else{
+            return redirect()->route('loginUser');
+        }
+       
     }
 
     public function criarChamado()
     {
+        if($this->checarSessao()){
+            return view('criar_chamados');
+        }else{
+            return redirect()->route('loginUser');
+        }
         return view('criar_chamados');
     }
 
     public function acompanharChamados()
     {
-        return view('acompanhar');
+        if($this->checarSessao()){
+            return view('acompanhar');
+        }else{
+            return redirect()->route('loginUser');
+        }
+        
     }
 }
 
