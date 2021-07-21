@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use App\Models\Chamado;
 use Illuminate\Http\Request;
 
 class UsuarioController extends Controller{
 
+    /* Função para verificar e realizar o login */
     public function login(LoginRequest $request)
     {
         $login = $request->loginemail;  
@@ -17,6 +19,9 @@ class UsuarioController extends Controller{
 
         if(@$usuarios->email == $login && @$usuarios->password == $senha){
             session()->put('usuario', @$usuarios->email);
+            session()->put('name', @$usuarios->name);
+            session()->put('id', @$usuarios->id);
+            session()->put('nivel', @$usuarios->nivel);
 
             if(@$usuarios->nivel =='1'){
                 return redirect()->route('homeAdm');
@@ -32,11 +37,43 @@ class UsuarioController extends Controller{
         }
     }
 
+    /* Função para Deslogar do Usuario */
+    public function sair()
+    {
+        session()->flush();
+        return redirect()->route('loginUser');
+    }
+
+    /* Função para Criar Chamados*/
+    public function chamadoCriar(Request $request)
+    {
+        $chamado = new Chamado;
+        $chamado->title = $request->titulo;
+        $chamado->conteudo = $request->conteudo;
+        $chamado->topico = $request->topico;
+        $chamado->anexo = $request->anexo;
+        $chamado->name = session('name');
+        $chamado->user_id = session('id');
+
+        $chamado->save();
+
+        return redirect()->route('homeUser');
+    }
+
+    /* Função para Checagem se é um Usuario*/
     private function checarSessao()
     {
         return session()->has('usuario');
     }
+    /* Função para Checar se é um Adm*/
+    public function checarAdm()
+    {
+        if(session('nivel') == '1'){
+            return true;
+        }
+    }
 
+    /* Função para Criação de Usuarios*/
     public function criar(Request $request)
     {
         $usuario = new User;
@@ -48,9 +85,11 @@ class UsuarioController extends Controller{
         $usuario->save();
         
         return redirect()->route('usuarios');
-    
     }
 
+    /* --------------------REDIRECIONAMENTOS----------------------- */
+
+    /* Função para Redirecionameto da Tela de Login */
     public function loginUser()
     {
 
@@ -65,52 +104,79 @@ class UsuarioController extends Controller{
         return view('login', $data);
     }
 
-
+    /* Função para Redirecionameto da Tela Home de Usuario */
     public function homeUser()  
     {
-        if($this->checarSessao()){
-            return view('index');
+        if($this->checarSessao() && !$this->checarAdm()){
+            $name = session('name');
+            $email = session('usuario');
+            $data = [
+                'name'=> $name,
+                'email'=> $email
+            ];
+            return view('index', $data);
+        }elseif($this->checarSessao() && $this->checarAdm()){
+            return redirect()->route('homeAdm');
         }else{
             return redirect()->route('loginUser');
         }
         
     }
 
+    /* Função para Redirecionameto da Tela Home de Adm */
     public function homeAdm()
     {
-        if($this->checarSessao()){
-            return view('admin.indexadm');
+        if($this->checarSessao() && $this->checarAdm()){
+            $name = session('name');
+            $chamado = Chamado::all();
+            $data = [
+                'chamado'=> $chamado,
+                'name'=> $name,
+            ];
+            return view('admin.indexadm', $data);
+        }elseif($this->checarSessao() && !$this->checarAdm()){
+            return redirect()->route('homeUser');
         }else{
             return redirect()->route('loginUser');
         }
         
     }
 
+    /* Função para Redirecionameto da Tela de Criação e Edição de Usuarios*/
     public function usuarios()
     {
-        if($this->checarSessao()){
+        if($this->checarSessao() && $this->checarAdm()){
             $users = User::all();
             return view('admin.usuarios',['users'=>$users]);
+        }elseif($this->checarSessao() && !$this->checarAdm()){
+            return redirect()->route('homeUser');
         }else{
             return redirect()->route('loginUser');
         }
        
     }
 
-    public function criarChamado()
+    /* Função para Redirecionameto da Tela de Criação de Chamados */
+    public function chamado()
     {
         if($this->checarSessao()){
-            return view('criar_chamados');
+            return view('chamados');
         }else{
             return redirect()->route('loginUser');
         }
-        return view('criar_chamados');
     }
 
+    /* Função para Redirecionameto da Tela de Acompanhamento de Chamados */
     public function acompanharChamados()
     {
         if($this->checarSessao()){
-            return view('acompanhar');
+            $chamado = Chamado::all();
+            $id = session('id');
+            $data = [
+                'chamado' => $chamado,
+                'id' => $id
+            ];
+            return view('acompanhar', $data);
         }else{
             return redirect()->route('loginUser');
         }
