@@ -14,7 +14,7 @@
             <div class="">
                 <p class="card-title text-center">Bem vindo,<b> {{$name}}</b></p>
             </div>
-            <a href="{{route('sair')}}" class="btn btn-primary btn-sm mt-3"><i class="fas fa-tachometer-alt"></i> Painel de Administração</a>
+            <a href="{{route('paineladm')}}" class="btn btn-primary btn-sm mt-3"><i class="fas fa-tachometer-alt"></i> Painel de Administração</a>
             <a href="{{route('sair')}}" class="btn btn-primary btn-sm mt-3"><i class="fas fa-door-open"></i> Sair</a>
         </div>
     </div>
@@ -31,11 +31,11 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th scope="row">CODIGO</th>
+                <th scope="row">Nª CHAMADO</th>
                 <th scope="row">NOME</th>
                 <th scope="row">ASSUNTO</th>
                 <th scope="row">TOPICO</th>
-                <th scope="row">DATA</th>
+                <th scope="row">DATA DE CRIAÇÃO</th>
                 <th scope="row"></th>
             </tr>
         </thead>

@@ -74,6 +74,10 @@ a:hover{
     height: 30rem;
 }
 
+.listagem-dp{
+    height: 13rem;
+}
+
 .voltar{
     color: black;
     top: 42px;

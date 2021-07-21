@@ -10,7 +10,7 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th scope="row">CODIGO</th>
+                <th scope="row">Nª CHAMADO</th>
                 <th scope="row">NOME</th>
                 <th scope="row">ASSUNTO</th>
                 <th scope="row">DATA</th>

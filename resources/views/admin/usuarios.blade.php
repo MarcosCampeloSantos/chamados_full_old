@@ -37,6 +37,10 @@
                 <input type="text" class="form-control" name="cria_nome" id="cria_email" placeholder="Digite o Nome">
             </div>
             <div class="mb-3">
+                <label class="form-label">Departamento</label>
+                <input type="text" class="form-control" name="cria_dep" id="cria_email" placeholder="Digite o Nome">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">E-mail</label>
                 <input type="email" class="form-control" name="cria_email" id="cria_email" placeholder="Digite o E-mail">
             </div>
@@ -64,6 +68,7 @@
             <tr>
                 <th scope="row">CODIGO</th>
                 <th scope="row">NOME</th>
+                <th scope="row">DEPARTAMENTO</th>
                 <th scope="row">NIVEL DE ACESSO</th>
                 <th scope="row">DATA</th>
                 <th scope="row" class="text-center">EDITAR</th>
@@ -74,6 +79,7 @@
             <tr>
                 <th scope="row">{{$item->id}}</th>
                 <td >{{$item->name}}</td>
+                <td></td>
                 @if ($item->nivel == '1')
                 <td>Administrador</td>
                 @else

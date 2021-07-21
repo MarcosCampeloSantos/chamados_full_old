@@ -22,6 +22,7 @@ Route::get('/chamados','usuariocontroller@chamado')->name('chamado'); #Tela Cria
 Route::get('/acompanhar','usuariocontroller@acompanharChamados')->name('acompanhar'); #Tela de acompanhamento de Chamados
 Route::get('/homeAdm','usuariocontroller@homeAdm')->name('homeAdm'); #Tela de acompanhamento de Chamados
 Route::get('/sair','usuariocontroller@sair')->name('sair'); #Deslogar do Usuario
+Route::get('/paineladm','usuariocontroller@painelAdm')->name('paineladm'); #Deslogar do Usuario
 
 #----POST-------
 Route::post('criar_user', 'usuariocontroller@criar')->name('criar_user'); #Verificação de Criação de Usuario

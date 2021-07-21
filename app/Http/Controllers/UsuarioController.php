@@ -78,6 +78,7 @@ class UsuarioController extends Controller{
     {
         $usuario = new User;
         $usuario ->name = $request->cria_nome;
+        $usuario ->departamento = $request->cria_dep;
         $usuario ->email = $request->cria_email;
         $usuario ->password = $request->cria_senha;
         $usuario ->nivel = $request->nivel_user;
@@ -89,10 +90,20 @@ class UsuarioController extends Controller{
 
     /* --------------------REDIRECIONAMENTOS----------------------- */
 
+    public function painelAdm()
+    {
+        if($this->checarSessao() && $this->checarAdm()){
+            return view('admin.paineladm');
+        }elseif($this->checarSessao() && !$this->checarAdm()){
+            return redirect()->route('homeUser');
+        }else{
+            return redirect()->route('loginUser');
+        }
+    }
+
     /* Função para Redirecionameto da Tela de Login */
     public function loginUser()
     {
-
         $erro = session('erro');
         $data = [];
         if(!empty($erro)){
@@ -100,7 +111,6 @@ class UsuarioController extends Controller{
                 'erro' => $erro
             ];
         }
-
         return view('login', $data);
     }
 
@@ -145,7 +155,7 @@ class UsuarioController extends Controller{
     /* Função para Redirecionameto da Tela de Criação e Edição de Usuarios*/
     public function usuarios()
     {
-        if($this->checarSessao() && $this->checarAdm()){
+        if(!$this->checarSessao() && !$this->checarAdm()){
             $users = User::all();
             return view('admin.usuarios',['users'=>$users]);
         }elseif($this->checarSessao() && !$this->checarAdm()){
