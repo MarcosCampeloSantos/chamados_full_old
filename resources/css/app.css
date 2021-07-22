@@ -23,6 +23,10 @@ a:hover{
     width: 15rem;
 }
 
+.chat_content_interno{
+    max-width: 27rem;
+}
+
 .chat{
     background-color: rgb(240, 255, 255);
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.288) inset;

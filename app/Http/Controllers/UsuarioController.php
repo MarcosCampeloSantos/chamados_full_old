@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Models\Chamado;
+use App\Models\Topico;
+use App\Models\Interacoe;
+use App\Models\Relacionamento;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
 
@@ -45,6 +48,17 @@ class UsuarioController extends Controller{
         return redirect()->route('loginUser');
     }
 
+    public function criarTop(Request $request)
+    {
+        $topicos = new Topico;
+        $topicos->topicos = $request->cria_top;
+
+        $topicos->save();
+        return redirect()->route('paineladm');
+        
+    }
+
+    /* Função para Criar os Departamentos */
     public function criarDep(Request $request)
     {
         $departamento = new Departamento;
@@ -68,6 +82,22 @@ class UsuarioController extends Controller{
         $chamado->save();
 
         return redirect()->route('homeUser');
+    }
+
+    /* Função para Envio de mensagens nos Chamados */
+    public function envChat(Request $request)
+    {
+        $chat = new Interacoe;
+        $chat->chamado_id = $request->id_chamado;
+        $chat->chat = $request->chat;
+
+        $chat->save();
+        if($this->checarAdm()){
+            return redirect()->route('homeAdm');
+        }elseif(!$this->checarAdm()){
+            return redirect()->route('acompanhar');
+        }
+        
     }
 
     /* Função para Checagem se é um Usuario*/
@@ -99,12 +129,16 @@ class UsuarioController extends Controller{
     }
 
     /* --------------------REDIRECIONAMENTOS----------------------- */
-
+    /* Função para Redirecionameto do Painel Administrativo */
     public function painelAdm()
     {
-        if($this->checarSessao() && $this->checarAdm()){
+        if(!$this->checarSessao() && !$this->checarAdm()){
+            $relacionamentos = Relacionamento::all();
             $departamento = Departamento::all();
+            $topicos = Topico::all();
             $data=[
+                'relacionamentos' => $relacionamentos,
+                'topicos' => $topicos,
                 'departamento'=> $departamento
             ];
             return view('admin.paineladm', $data);
@@ -153,7 +187,9 @@ class UsuarioController extends Controller{
         if($this->checarSessao() && $this->checarAdm()){
             $name = session('name');
             $chamado = Chamado::all();
+            $chat = Interacoe::all();
             $data = [
+                'interacoes' => $chat,
                 'chamado'=> $chamado,
                 'name'=> $name,
             ];
@@ -201,7 +237,9 @@ class UsuarioController extends Controller{
         if($this->checarSessao()){
             $chamado = Chamado::all();
             $id = session('id');
+            $chat = Interacoe::all();
             $data = [
+                'interacoes' => $chat,
                 'chamado' => $chamado,
                 'id' => $id
             ];

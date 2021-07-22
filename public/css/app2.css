@@ -1,5 +1,6 @@
 body{
     background-color: azure;
+    overflow: hidden;
 }
 
 a{
@@ -21,6 +22,10 @@ a:hover{
 
 .chat_select{
     width: 15rem;
+}
+
+.chat_content_interno{
+    max-width: 27rem;
 }
 
 .chat{

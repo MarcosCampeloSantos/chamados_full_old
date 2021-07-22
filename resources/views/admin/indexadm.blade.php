@@ -71,22 +71,29 @@
                         <div  class="mb-3 text-center lh-sm">
                             <label for="disabledTextInput" class="form-label "><b>Assunto: </b>{{$item->title}}</label>
                         </div>
-                        <div class="chat chat_content">
-                            
+                        <div class="chat chat_content p-3 overflow-auto">
+                            @foreach ($interacoes as $item1)
+                            @if ($item1->chamado_id == $item->id)
+                            <div class="mb-3 shadow p-3 bg-body rounded">
+                                <p class="text-break">{{$item1->chat}}</p>
+                            </div>
+                            @endif
+                            @endforeach  
                         </div>
                         <div>
-                            <form action="">
+                            <form action="{{route('envchat')}}" method="POST">
                                 @csrf
                                 <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" id="cria_email" placeholder="Digite o Aqui..."></textarea>
                                 <div class="row">
                                     <div class="col">
                                         <button class="btn btn-primary" type="submit">Enviar</button>
                                     </div>
+                                    <input type="hidden" name="id_chamado" value="{{$item->id}}">
                                     <div class="col">
-                                        <select class="form-select chat_select" name="dep_user" aria-label="Default select example">
+                                        {{--<select class="form-select chat_select" name="dep_user" aria-label="Default select example">
                                             <option selected>Selecione Status de Atendimento</option>
                                             <option value="1"></option>
-                                        </select>
+                                        </select>--}}
                                     </div>
                                 </div>
                             </form>
