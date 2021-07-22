@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Models\Chamado;
+use App\Models\Departamento;
 use Illuminate\Http\Request;
 
 class UsuarioController extends Controller{
@@ -44,6 +45,15 @@ class UsuarioController extends Controller{
         return redirect()->route('loginUser');
     }
 
+    public function criarDep(Request $request)
+    {
+        $departamento = new Departamento;
+        $departamento->departamento = $request->cria_dep;
+
+        $departamento->save();
+        return redirect()->route('paineladm');
+    }
+
     /* Função para Criar Chamados*/
     public function chamadoCriar(Request $request)
     {
@@ -78,7 +88,7 @@ class UsuarioController extends Controller{
     {
         $usuario = new User;
         $usuario ->name = $request->cria_nome;
-        $usuario ->departamento = $request->cria_dep;
+        $usuario ->departamento = $request->dep_user;
         $usuario ->email = $request->cria_email;
         $usuario ->password = $request->cria_senha;
         $usuario ->nivel = $request->nivel_user;
@@ -93,7 +103,11 @@ class UsuarioController extends Controller{
     public function painelAdm()
     {
         if($this->checarSessao() && $this->checarAdm()){
-            return view('admin.paineladm');
+            $departamento = Departamento::all();
+            $data=[
+                'departamento'=> $departamento
+            ];
+            return view('admin.paineladm', $data);
         }elseif($this->checarSessao() && !$this->checarAdm()){
             return redirect()->route('homeUser');
         }else{
@@ -156,8 +170,13 @@ class UsuarioController extends Controller{
     public function usuarios()
     {
         if(!$this->checarSessao() && !$this->checarAdm()){
+            $departamento = Departamento::all();
             $users = User::all();
-            return view('admin.usuarios',['users'=>$users]);
+            $data = [
+                'users' => $users,
+                'departamento' => $departamento
+            ];
+            return view('admin.usuarios', $data);
         }elseif($this->checarSessao() && !$this->checarAdm()){
             return redirect()->route('homeUser');
         }else{

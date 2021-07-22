@@ -11,6 +11,24 @@ a:hover{
     color: rgb(101, 101, 189);
 }
 
+.chat_content{
+    height: 25rem;
+}
+
+.chat_label{
+    width: 29rem;
+}
+
+.chat_select{
+    width: 15rem;
+}
+
+.chat{
+    background-color: rgb(240, 255, 255);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.288) inset;
+    border-radius: 0.5rem;
+}
+
 .cor{
     background-color: white;
 }

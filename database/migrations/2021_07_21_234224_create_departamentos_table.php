@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuportesTable extends Migration
+class CreateDepartamentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateSuportesTable extends Migration
      */
     public function up()
     {
-        Schema::create('suportes', function (Blueprint $table) {
-            $table->id()->unique();
+        Schema::create('departamentos', function (Blueprint $table) {
+            $table->id();
             $table->string('departamento');
-            $table->string('topicos');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateSuportesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('suportes');
+        Schema::dropIfExists('departamentos');
     }
 }

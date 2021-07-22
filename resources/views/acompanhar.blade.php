@@ -9,7 +9,7 @@
 <div class="overflow-auto listagem-chamados border rounded-2">
     <table class="table table-striped table-hover">
         <thead>
-            <tr>
+            <tr class="sticky-top table-dark">
                 <th scope="row">Nª CHAMADO</th>
                 <th scope="row">NOME</th>
                 <th scope="row">ASSUNTO</th>

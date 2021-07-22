@@ -1,7 +1,7 @@
 @extends('styles.home')
 
 @section('title','Chamados-Criar')
-@section('name','Novo Chamado')
+@section('name','Criação e Edição de Usuario')
 
 @section('content')
 {{---------------------BOTÃO PARA CHAMAR MODAL------------------------}}
@@ -26,7 +26,7 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label">Nivel</label>
-                <select class="form-select" name="nivel_user" aria-label="Default select example">
+                <select class="form-select overflow-auto" name="nivel_user" aria-label="Default select example">
                     <option selected>Selecione Nivel do Usuario</option>
                     <option value="1">Admin</option>
                     <option value="2">Usuario</option>
@@ -38,7 +38,12 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Departamento</label>
-                <input type="text" class="form-control" name="cria_dep" id="cria_email" placeholder="Digite o Nome">
+                <select class="form-select" name="dep_user" aria-label="Default select example">
+                    <option selected>Selecione Nivel do Usuario</option>
+                    @foreach ($departamento as $item)
+                    <option value="{{$item->departamento}}">{{$item->departamento}}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">E-mail</label>
@@ -65,7 +70,7 @@
 <div class="overflow-auto listagem-chamados border rounded-2 m-3">
     <table class="table table-striped table-hover">
         <thead>
-            <tr>
+            <tr class="table-dark sticky-top">
                 <th scope="row">CODIGO</th>
                 <th scope="row">NOME</th>
                 <th scope="row">DEPARTAMENTO</th>
@@ -79,7 +84,7 @@
             <tr>
                 <th scope="row">{{$item->id}}</th>
                 <td >{{$item->name}}</td>
-                <td></td>
+                <td>{{$item->departamento}}</td>
                 @if ($item->nivel == '1')
                 <td>Administrador</td>
                 @else

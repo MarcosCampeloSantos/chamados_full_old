@@ -25,6 +25,7 @@ Route::get('/sair','usuariocontroller@sair')->name('sair'); #Deslogar do Usuario
 Route::get('/paineladm','usuariocontroller@painelAdm')->name('paineladm'); #Deslogar do Usuario
 
 #----POST-------
-Route::post('criar_user', 'usuariocontroller@criar')->name('criar_user'); #Verificação de Criação de Usuario
+Route::post('/criar_user', 'usuariocontroller@criar')->name('criar_user'); #Verificação de Criação de Usuario
 Route::post('/login', 'usuariocontroller@login')->name('login'); #Verificação de Login
-Route::post('chamadoCriar','usuariocontroller@chamadoCriar')->name('chamadoCriar'); #Criando Chamado
+Route::post('/chamadoCriar','usuariocontroller@chamadoCriar')->name('chamadoCriar'); #Criando Chamado
+Route::post('/criarDep','usuariocontroller@criarDep')->name('criardep');

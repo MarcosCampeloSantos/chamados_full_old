@@ -29,7 +29,7 @@
 </div>
 <div class="overflow-auto listagem-chamados border rounded-2 m-3">
     <table class="table table-striped table-hover">
-        <thead>
+        <thead class="sticky-top table-dark">
             <tr>
                 <th scope="row">Nª CHAMADO</th>
                 <th scope="row">NOME</th>
@@ -48,30 +48,55 @@
                     <td>{{$item->topico}}</td>
                     <td>{{$item->created_at}}</td>
                     {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
-                    <td><a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Visualizar Chamado</a></td>
+                    <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
                 </tr>
             @endforeach
         </tbody>
     </table>
     
     {{---------------------MODAL COM DADOS DO CHAMADO------------------------}}
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @foreach ($chamado as $item)
+    <div class="modal fade" id="exampleModal{{$item->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Chamado Nª<b>{{$item->id}}</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="mb-3 text-center lh-sm">
+                            <label for="disabledTextInput" class="form-label"><b>Nome: </b>{{$item->name}}</label>
+                        </div>
+                        <div  class="mb-3 text-center lh-sm">
+                            <label for="disabledTextInput" class="form-label "><b>Assunto: </b>{{$item->title}}</label>
+                        </div>
+                        <div class="chat chat_content">
+                            
+                        </div>
+                        <div>
+                            <form action="">
+                                @csrf
+                                <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" id="cria_email" placeholder="Digite o Aqui..."></textarea>
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-primary" type="submit">Enviar</button>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-select chat_select" name="dep_user" aria-label="Default select example">
+                                            <option selected>Selecione Status de Atendimento</option>
+                                            <option value="1"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
         </div>
     </div>
+    @endforeach
 </div>
 @endsection
     
