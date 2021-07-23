@@ -39,7 +39,7 @@
                 <label class="form-label">Departamento</label>
                 <select class="form-select" name="dep_user" aria-label="Default select example">
                     @foreach ($departamento as $item)
-                    <option value="{{$item->departamento}}">{{$item->departamento}}</option>
+                    <option value="{{$item->id}}">{{$item->departamento}}</option>
                     @endforeach
                 </select>
             </div>
@@ -82,7 +82,13 @@
             <tr>
                 <th scope="row">{{$item->id}}</th>
                 <td >{{$item->name}}</td>
-                <td>{{$item->departamento}}</td>
+                <td>
+                    @foreach ($departamento as $item2)
+                        @if ($item->departamento == $item2->id)
+                            {{$item2->departamento}}
+                        @endif
+                    @endforeach
+                </td>
                 @if ($item->nivel == '1')
                 <td>Administrador</td>
                 @else

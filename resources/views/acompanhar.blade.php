@@ -70,12 +70,6 @@
                                         <button class="btn btn-primary" type="submit">Enviar</button>
                                     </div>
                                     <input type="hidden" name="id_chamado" value="{{$item->id}}">
-                                    <div class="col">
-                                        {{--<select class="form-select chat_select" name="dep_user" aria-label="Default select example">
-                                            <option selected>Selecione Status de Atendimento</option>
-                                            <option value="1"></option>
-                                        </select>--}}
-                                    </div>
                                 </div>
                             </form>
                         </div>

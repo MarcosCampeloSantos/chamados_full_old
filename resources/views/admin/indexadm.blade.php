@@ -27,38 +27,91 @@
 <div>
     <h3 class="display-6 text-center">Chamados em Aberto</h3>
 </div>
+<div>
+    <nav>
+        <div class="nav nav-tabs sticky-top" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Todos os Chamados</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Chamados Atribuidos</button>
+        </div>
+    </nav>
+</div>
 <div class="overflow-auto listagem-chamados border rounded-2 m-3">
-    <table class="table table-striped table-hover">
-        <thead class="sticky-top table-dark">
-            <tr>
-                <th scope="row">Nª CHAMADO</th>
-                <th scope="row">NOME</th>
-                <th scope="row">ASSUNTO</th>
-                <th scope="row">TOPICO</th>
-                <th scope="row">DATA DE CRIAÇÃO</th>
-                <th scope="row"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($chamado as $item)
-                <tr>
-                    <th scope="row">{{$item->id}}</th>
-                    <td >{{$item->name}}</td>
-                    <td>{{$item->title}}</td>
-                    <td>
-                        @foreach ($topicos as $item1)
-                            @if ($item->topico == $item1->id)
-                                {{$item1->topicos}}
-                            @endif
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <table class="table table-striped table-hover">
+                <thead class="sticky-top table-dark">
+                    <tr>
+                        <th scope="row">Nª CHAMADO</th>
+                        <th scope="row">NOME</th>
+                        <th scope="row">ASSUNTO</th>
+                        <th scope="row">TOPICO</th>
+                        <th scope="row">DATA DE CRIAÇÃO</th>
+                        <th scope="row"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($chamado as $item)
+                        <tr>
+                            <th scope="row">{{$item->id}}</th>
+                            <td >{{$item->name}}</td>
+                            <td>{{$item->title}}</td>
+                            <td>
+                                @foreach ($topicos as $item1)
+                                    @if ($item->topico == $item1->id)
+                                        {{$item1->topicos}}
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>{{$item->created_at}}</td>
+                            {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
+                            <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <table class="table table-striped table-hover">
+                    <thead class="sticky-top table-dark">
+                        <tr>
+                            <th scope="row">Nª CHAMADO</th>
+                            <th scope="row">NOME</th>
+                            <th scope="row">ASSUNTO</th>
+                            <th scope="row">TOPICO</th>
+                            <th scope="row">DATA DE CRIAÇÃO</th>
+                            <th scope="row"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($chamado as $item)
+                            @foreach ($relacionamentos as $item6)
+                                @if ($item6->topicos_id == $item->topico)
+                                    @if ($item6->departamentos_id == $departamento)
+                                        <tr>
+                                            <th scope="row">{{$item->id}}</th>
+                                            <td >{{$item->name}}</td>
+                                            <td>{{$item->title}}</td>
+                                            <td>
+                                                @foreach ($topicos as $item1)
+                                                    @if ($item->topico == $item1->id)
+                                                        {{$item1->topicos}}
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>{{$item->created_at}}</td>
+                                            {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
+                                            <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
+                                        </tr>
+                                    @endif
+                                @endif
+                            @endforeach
                         @endforeach
-                    </td>
-                    <td>{{$item->created_at}}</td>
-                    {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
-                    <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     
     {{---------------------MODAL COM DADOS DO CHAMADO------------------------}}
     @foreach ($chamado as $item)
@@ -76,17 +129,17 @@
                         </div>
                         <div class="chat chat_content p-3 overflow-auto">
                             @foreach ($interacoes as $item1)
-                            @if ($item1->chamado_id == $item->id)
-                            <div class="mb-3 shadow p-3 bg-body rounded">
-                                @foreach ($usuarios as $item3)
-                                    @if ($item1->user_id == $item3->id)
-                                        <p><b>{{$item3->name}}</b></p>
-                                    @endif
-                                @endforeach
-                                <p class="text-break">{{$item1->chat}}</p>
-                                <p class="fs-6 fw-light text-end mt-4">{{$item->created_at}}</p>
-                            </div>
-                            @endif
+                                @if ($item1->chamado_id == $item->id)
+                                    <div class="mb-3 shadow p-3 bg-body rounded">
+                                        @foreach ($usuarios as $item3)
+                                            @if ($item1->user_id == $item3->id)
+                                                <p><b>{{$item3->name}}</b></p>
+                                            @endif
+                                        @endforeach
+                                        <p class="text-break">{{$item1->chat}}</p>
+                                        <p class="fs-6 fw-light text-end mt-4">{{$item->created_at}}</p>
+                                    </div>
+                                @endif
                             @endforeach  
                         </div>
                         <div>
@@ -99,10 +152,11 @@
                                     </div>
                                     <input type="hidden" name="id_chamado" value="{{$item->id}}">
                                     <div class="col">
-                                        {{--<select class="form-select chat_select" name="dep_user" aria-label="Default select example">
-                                            <option selected>Selecione Status de Atendimento</option>
-                                            <option value="1"></option>
-                                        </select>--}}
+                                        <select class="form-select chat_select" name="dep_user" aria-label="Default select example">
+                                            @foreach ($status as $item5)
+                                                <option value="{{$item5->id}}">{{$item5->status}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </form>

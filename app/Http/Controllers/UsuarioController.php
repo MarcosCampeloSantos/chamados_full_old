@@ -8,6 +8,7 @@ use App\Models\Chamado;
 use App\Models\Topico;
 use App\Models\Interacoe;
 use App\Models\Relacionamento;
+use App\Models\Atendimento;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class UsuarioController extends Controller{
             session()->put('name', @$usuarios->name);
             session()->put('id', @$usuarios->id);
             session()->put('nivel', @$usuarios->nivel);
+            session()->put('departamento', @$usuarios->departamento);
 
             if(@$usuarios->nivel =='1'){
                 return redirect()->route('homeAdm');
@@ -85,14 +87,21 @@ class UsuarioController extends Controller{
     public function chamadoCriar(Request $request)
     {
         $chamado = new Chamado;
+        $chat = new Interacoe;
         $chamado->title = $request->titulo;
-        $chamado->conteudo = $request->conteudo;
         $chamado->topico = $request->topico;
         $chamado->anexo = $request->anexo;
         $chamado->name = session('name');
         $chamado->user_id = session('id');
 
         $chamado->save();
+
+        $chat->user_id = session('id');
+        $chat->chat = $request->conteudo;
+        $chat->chamado_id = $chamado->id;
+
+        $chat->save();
+        
 
         return redirect()->route('homeUser');
     }
@@ -142,10 +151,11 @@ class UsuarioController extends Controller{
     }
 
     /* --------------------REDIRECIONAMENTOS----------------------- */
+
     /* Função para Redirecionameto do Painel Administrativo */
     public function painelAdm()
     {
-        if(!$this->checarSessao() && !$this->checarAdm()){
+        if($this->checarSessao() && $this->checarAdm()){
             $relacionamentos = Relacionamento::all();
             $departamento = Departamento::all();
             $topicos = Topico::all();
@@ -199,11 +209,18 @@ class UsuarioController extends Controller{
     {
         if($this->checarSessao() && $this->checarAdm()){
             $name = session('name');
+            $departamento = session('departamento');
             $topicos = Topico::all();
             $usuarios = User::all();
             $chamado = Chamado::all();
             $chat = Interacoe::all();
+            $status= Atendimento::all();
+            $relacionamentos = Relacionamento::all();
+            
             $data = [
+                'relacionamentos' => $relacionamentos,
+                'departamento' => $departamento,
+                'status' => $status,
                 'topicos' => $topicos,
                 'name' => $name,
                 'interacoes' => $chat,
@@ -222,7 +239,7 @@ class UsuarioController extends Controller{
     /* Função para Redirecionameto da Tela de Criação e Edição de Usuarios*/
     public function usuarios()
     {
-        if(!$this->checarSessao() && !$this->checarAdm()){
+        if($this->checarSessao() && $this->checarAdm()){
             $departamento = Departamento::all();
             $users = User::all();
             $data = [
