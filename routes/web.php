@@ -31,3 +31,4 @@ Route::post('/chamadoCriar','usuariocontroller@chamadoCriar')->name('chamadoCria
 Route::post('/criarDep','usuariocontroller@criarDep')->name('criardep'); #Criar Departamentos
 Route::post('/criartop','usuariocontroller@criarTop')->name('criartop'); #Criar Topico de Atendimento
 Route::post('/envChat','usuariocontroller@envChat')->name('envchat'); #Enviar mensagem no chat
+Route::post('/criarrel','usuariocontroller@criarRel')->name('criar_rel'); #Criar Relacionamentro

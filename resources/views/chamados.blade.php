@@ -12,10 +12,9 @@
         <div class="mb-3">
             <label class="form-label">Topicos</label>
             <select class="form-select" name="topico" aria-label="Default select example">
-                <option selected>Selecione um Topico de Suporte</option>
-                <option value="1">Protheus</option>
-                <option value="2">Chamados</option>
-                <option value="3">Acessos</option>
+                @foreach ($topicos as $item)
+                    <option value="{{$item->id}}">{{$item->topicos}}</option>
+                @endforeach
             </select>
         </div>
         <div class="mb-3">

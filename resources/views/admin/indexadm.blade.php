@@ -45,7 +45,13 @@
                     <th scope="row">{{$item->id}}</th>
                     <td >{{$item->name}}</td>
                     <td>{{$item->title}}</td>
-                    <td>{{$item->topico}}</td>
+                    <td>
+                        @foreach ($topicos as $item1)
+                            @if ($item->topico == $item1->id)
+                                {{$item1->topicos}}
+                            @endif
+                        @endforeach
+                    </td>
                     <td>{{$item->created_at}}</td>
                     {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
                     <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
@@ -65,17 +71,20 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <div class="mb-3 text-center lh-sm">
-                            <label for="disabledTextInput" class="form-label"><b>Nome: </b>{{$item->name}}</label>
-                        </div>
                         <div  class="mb-3 text-center lh-sm">
-                            <label for="disabledTextInput" class="form-label "><b>Assunto: </b>{{$item->title}}</label>
+                            <h5 class="form-label display-6">{{$item->title}}</h5>
                         </div>
                         <div class="chat chat_content p-3 overflow-auto">
                             @foreach ($interacoes as $item1)
                             @if ($item1->chamado_id == $item->id)
                             <div class="mb-3 shadow p-3 bg-body rounded">
+                                @foreach ($usuarios as $item3)
+                                    @if ($item1->user_id == $item3->id)
+                                        <p><b>{{$item3->name}}</b></p>
+                                    @endif
+                                @endforeach
                                 <p class="text-break">{{$item1->chat}}</p>
+                                <p class="fs-6 fw-light text-end mt-4">{{$item->created_at}}</p>
                             </div>
                             @endif
                             @endforeach  

@@ -27,7 +27,6 @@
             <div class="mb-3">
                 <label class="form-label">Nivel</label>
                 <select class="form-select overflow-auto" name="nivel_user" aria-label="Default select example">
-                    <option selected>Selecione Nivel do Usuario</option>
                     <option value="1">Admin</option>
                     <option value="2">Usuario</option>
                 </select>
@@ -39,7 +38,6 @@
             <div class="mb-3">
                 <label class="form-label">Departamento</label>
                 <select class="form-select" name="dep_user" aria-label="Default select example">
-                    <option selected>Selecione Nivel do Usuario</option>
                     @foreach ($departamento as $item)
                     <option value="{{$item->departamento}}">{{$item->departamento}}</option>
                     @endforeach

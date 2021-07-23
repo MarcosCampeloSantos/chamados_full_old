@@ -56,7 +56,7 @@
     </button>
   </div>
 </div>
-<div class="row">
+<div class="row mt-3">
   <div class="w-25 mx-auto col">
     <h5 class="text-center">Relacionamentos</h6>
     <div class="overflow-auto border rounded-3 listagem-dp">
@@ -73,12 +73,19 @@
           @foreach ($relacionamentos as $item)
             <tr class="text-center">
               <th scope="row" class="border">{{$item->id}}</th>
-              <td>{{$item->id}}</td>
-              <td>{{$item->departamento}}</td>
               <td>
-                <select class="form-select" size="1" aria-label="size 3 select example">
-                  <option>{{$item->topico}}</option>
-                </select>  
+                @foreach ($departamento as $item2)
+                @if($item->departamentos_id == $item2->id)
+                  {{$item2->departamento}}
+                @endif
+                @endforeach
+              </td>
+              <td>
+                @foreach ($topicos as $item3)
+                @if($item->topicos_id == $item3->id)
+                  {{$item3->topicos}}
+                @endif
+                @endforeach
               </td>
               <td>
                 <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#rel">
@@ -132,7 +139,7 @@
           @csrf
           <div class="mb-3">
               <label class="form-label">Topico</label>
-              <input type="text" class="form-control" rows="3" name="cria_top" id="cria_email" placeholder="Digite o Departamento">
+              <input type="text" class="form-control" rows="3" name="cria_top" id="cria_email" placeholder="Digite o Topico">
           </div>
           <div class="mb-3">
               <button type="submit" class="btn btn-primary">Criar</button>
@@ -147,15 +154,25 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Criar Deparmento</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Criar Relacionamentos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form action="{{route('criar_rel')}}" method="POST">
           @csrf
           <div class="mb-3">
-              <label class="form-label">Relacionamento</label>
-              <input type="text" class="form-control" rows="3" name="cria_dep" id="cria_email" placeholder="Digite o Topico">
+              <label class="form-label">Departamento</label>
+              <select class="form-select" name="rel_dep" size="1" aria-label="size 3 select example">
+                @foreach ($departamento as $item)
+                  <option value="{{$item->id}}">{{$item->departamento}}</option>
+                @endforeach
+              </select>
+              <label class="form-label mt-3">Relacionado a</label>
+              <select class="form-select" name="rel_top" size="1" aria-label="size 3 select example">
+                @foreach ($topicos as $item)
+                  <option value="{{$item->id}}">{{$item->topicos}}</option>
+                @endforeach
+              </select>
           </div>
           <div class="mb-3">
               <button type="submit" class="btn btn-primary">Criar</button>

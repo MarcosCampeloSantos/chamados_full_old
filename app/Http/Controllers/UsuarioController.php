@@ -58,6 +58,19 @@ class UsuarioController extends Controller{
         
     }
 
+    /* Função para Criando Relacionamentos */
+
+    public function criarRel(Request $request)
+    {
+        $relacionamentos = new Relacionamento;
+        $relacionamentos->departamentos_id = $request->rel_dep;
+        $relacionamentos->topicos_id = $request->rel_top;
+
+        $relacionamentos->save();
+
+        return redirect()->route('paineladm');
+    }
+
     /* Função para Criar os Departamentos */
     public function criarDep(Request $request)
     {
@@ -88,6 +101,7 @@ class UsuarioController extends Controller{
     public function envChat(Request $request)
     {
         $chat = new Interacoe;
+        $chat->user_id = session('id');
         $chat->chamado_id = $request->id_chamado;
         $chat->chat = $request->chat;
 
@@ -97,7 +111,6 @@ class UsuarioController extends Controller{
         }elseif(!$this->checarAdm()){
             return redirect()->route('acompanhar');
         }
-        
     }
 
     /* Função para Checagem se é um Usuario*/
@@ -186,12 +199,16 @@ class UsuarioController extends Controller{
     {
         if($this->checarSessao() && $this->checarAdm()){
             $name = session('name');
+            $topicos = Topico::all();
+            $usuarios = User::all();
             $chamado = Chamado::all();
             $chat = Interacoe::all();
             $data = [
+                'topicos' => $topicos,
+                'name' => $name,
                 'interacoes' => $chat,
                 'chamado'=> $chamado,
-                'name'=> $name,
+                'usuarios'=> $usuarios
             ];
             return view('admin.indexadm', $data);
         }elseif($this->checarSessao() && !$this->checarAdm()){
@@ -225,7 +242,11 @@ class UsuarioController extends Controller{
     public function chamado()
     {
         if($this->checarSessao()){
-            return view('chamados');
+            $topicos = Topico::all();
+            $data = [
+                'topicos' => $topicos
+            ];
+            return view('chamados', $data);
         }else{
             return redirect()->route('loginUser');
         }
@@ -237,11 +258,13 @@ class UsuarioController extends Controller{
         if($this->checarSessao()){
             $chamado = Chamado::all();
             $id = session('id');
+            $usuarios = User::all();
             $chat = Interacoe::all();
             $data = [
                 'interacoes' => $chat,
                 'chamado' => $chamado,
-                'id' => $id
+                'id' => $id,
+                'usuarios'=> $usuarios
             ];
             return view('acompanhar', $data);
         }else{
