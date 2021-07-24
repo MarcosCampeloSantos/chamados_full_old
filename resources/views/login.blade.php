@@ -15,8 +15,8 @@
             <li>{{$item}}</li>
           @endforeach
         </div>
-        {{--Erros de Login--}}
         @endif
+        {{--Erros de Login--}}
         @if (isset($erro))
         <div class="alert alert-danger" role="alert">
           <li>{{$erro}}</li>
