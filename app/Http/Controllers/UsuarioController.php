@@ -146,7 +146,7 @@ class UsuarioController extends Controller{
     /* Função para Redirecionameto do Painel Administrativo */
     public function painelAdm()
     {
-        if(!$this->checarSessao() && !$this->checarAdm()){
+        if($this->checarSessao() && $this->checarAdm()){
             $relacionamentos = Relacionamento::all();
             $departamento = Departamento::all();
             $topicos = Topico::all();
@@ -223,7 +223,7 @@ class UsuarioController extends Controller{
     /* Função para Redirecionameto da Tela de Criação e Edição de Usuarios*/
     public function usuarios()
     {
-        if(!$this->checarSessao() && !$this->checarAdm()){
+        if($this->checarSessao() && $this->checarAdm()){
             $departamento = Departamento::all();
             $users = User::all();
             $data = [
