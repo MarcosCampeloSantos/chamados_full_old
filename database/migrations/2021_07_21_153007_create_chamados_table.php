@@ -16,10 +16,10 @@ class CreateChamadosTable extends Migration
         Schema::create('chamados', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
+            $table->string('status_id')->nullable($value = true);
             $table->string('title');
             $table->string('name');
             $table->string('topico');
-            $table->binary('anexo')->nullable($value = true);
             $table->timestamps();
         });
     }

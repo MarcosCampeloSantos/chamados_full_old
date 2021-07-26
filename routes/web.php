@@ -22,6 +22,7 @@ Route::get('/acompanhar','usuariocontroller@acompanharChamados')->name('acompanh
 Route::get('/homeAdm','usuariocontroller@homeAdm')->name('homeAdm'); #Tela Home do Adm
 Route::get('/sair','usuariocontroller@sair')->name('sair'); #Deslogar do Usuario
 Route::get('/paineladm','usuariocontroller@painelAdm')->name('paineladm'); #Deslogar do Usuario
+Route::get('/finalizados','usuariocontroller@finalizados')->name('finalizados'); #Tela de Chamados finalizados
 
 #----POST-------
 Route::post('/criar_user', 'usuariocontroller@criar')->name('criar_user'); #Verificação de Criação de Usuario
@@ -29,5 +30,6 @@ Route::post('/login', 'usuariocontroller@login')->name('login'); #Verificação 
 Route::post('/chamadoCriar','usuariocontroller@chamadoCriar')->name('chamadoCriar'); #Criando Chamado
 Route::post('/criarDep','usuariocontroller@criarDep')->name('criardep'); #Criar Departamentos
 Route::post('/criartop','usuariocontroller@criarTop')->name('criartop'); #Criar Topico de Atendimento
-Route::post('/envChat','usuariocontroller@envChat')->name('envchat'); #Enviar mensagem no chat
+Route::post('/envChat','usuariocontroller@envChat')->name('envchat'); #Enviar mensagem no chat 'Lado do ADM ou Operador'
 Route::post('/criarrel','usuariocontroller@criarRel')->name('criar_rel'); #Criar Relacionamentro
+Route::post('/chatuser','usuariocontroller@chatUser')->name('chatUser'); #Enviar Mensagem no chamado 'lado do Usuario'

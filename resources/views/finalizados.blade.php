@@ -1,6 +1,6 @@
 @extends('styles.home')
 
-@section('title','Chamados-Acompanhar')
+@section('title','Chamados Finalizados')
 
 @section('name','Acompanhar')
     
@@ -11,6 +11,7 @@
         <thead>
             <tr class="sticky-top table-dark">
                 <th scope="row">Nª CHAMADO</th>
+                <th scope="row">STATUS</th>
                 <th scope="row">NOME</th>
                 <th scope="row">ASSUNTO</th>
                 <th scope="row">DATA</th>
@@ -19,23 +20,26 @@
         </thead>
         <tbody>
             @foreach ($chamado as $item)
-            @if ($id == $item->user_id)
-            <tr>
-                <th scope="row">{{$item->id}}</th>
-                <td >{{$item->name}}</td>
-                <td>
-                    {{$item->title}}
-                    @foreach ($interacoes as $item1)
-                        @if ($item->id == $item1->chamado_id && $item1->anexo)
-                            <i class="fas fa-paperclip"></i>
+                @if ($id == $item->user_id && $item->status_id == '2')
+                    <tr>
+                        <th scope="row">{{$item->id}}</th>
+                        @if ($item->status_id == '2')
+                            <td><span class="badge bg-danger">Fechado</span></td>
                         @endif
-                    @endforeach
-                </td>
-                <td>{{$item->created_at}}</td>
-                 {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
-                <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
-            </tr>
-            @endif
+                        <td >{{$item->name}}</td>
+                        <td>
+                            {{$item->title}}
+                            @foreach ($interacoes as $item1)
+                                @if ($item->id == $item1->chamado_id && $item1->anexo)
+                                    <i class="fas fa-paperclip"></i>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>{{$item->created_at}}</td>
+                        {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
+                        <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -56,7 +60,7 @@
                         <div class="chat chat_content p-3 overflow-auto">
                             @foreach ($interacoes as $item1)
                             @if ($item1->chamado_id == $item->id)
-                            <div class="mb-3 shadow p-3 bg-body rounded">
+                            <div class="mb-3 shadow p-3 chat_color rounded">
                                 @foreach ($usuarios as $item3)
                                     @if ($item1->user_id == $item3->id)
                                         <p><b>{{$item3->name}}</b></p>
@@ -69,7 +73,7 @@
                             @endforeach  
                         </div>
                         <div>
-                            <form action="{{route('envchat')}}" method="POST">
+                            <form action="{{route('chatUser')}}" method="POST">
                                 @csrf
                                 <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" id="cria_email" placeholder="Digite o Aqui..."></textarea>
                                 <div class="row">

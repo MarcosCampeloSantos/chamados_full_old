@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChatRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UsuarioRequest;
 use App\Models\User;
@@ -9,7 +10,6 @@ use App\Models\Chamado;
 use App\Models\Topico;
 use App\Models\Interacoe;
 use App\Models\Relacionamento;
-use App\Models\Atendimento;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
 
@@ -35,6 +35,7 @@ class UsuarioController extends Controller{
             }else{
                 return redirect()->route('homeUser');
             }
+
         }elseif(User::where('email', '!=', $login)->first()){
             session()->flash('erro', 'Usuario Não Existe');
             return redirect()->route('loginUser');
@@ -89,14 +90,16 @@ class UsuarioController extends Controller{
     {
         $chamado = new Chamado;
         $chat = new Interacoe;
+
+        $chamado->status_id = '1';
         $chamado->title = $request->titulo;
         $chamado->topico = $request->topico;
-        $chamado->anexo = $request->anexo;
         $chamado->name = session('name');
         $chamado->user_id = session('id');
 
         $chamado->save();
 
+        $chat->anexo = $request->anexo;
         $chat->user_id = session('id');
         $chat->chat = $request->conteudo;
         $chat->chamado_id = $chamado->id;
@@ -110,12 +113,48 @@ class UsuarioController extends Controller{
     /* Função para Envio de mensagens nos Chamados */
     public function envChat(Request $request)
     {
+        $texto = $request->chat;
+        if (!empty($texto)) {
+            $chat = new Interacoe;
+            $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
+            $chamado->status_id = $request->status_chamado;
+            $chat->user_id = session('id');
+            $chat->chamado_id = $request->id_chamado;
+            $chat->chat = $request->chat;
+
+            $chat->save();
+            $chamado->save();
+            if($this->checarAdm()){
+                return redirect()->route('homeAdm');
+            }elseif(!$this->checarAdm()){
+                return redirect()->route('acompanhar');
+            }
+        }else{
+            if($this->checarAdm()){
+                session()->flash('id_Chat', $request->id_Chat);
+                session()->flash('erroChat', 'Digite uma Mensagem!');
+                return redirect()->route('homeAdm');
+            }elseif(!$this->checarAdm()){
+                session()->flash('id_Chat', $request->id_Chat);
+                session()->flash('erroChat', 'Digite uma Mensagem!');
+                return redirect()->route('acompanhar');
+            }
+        }
+
+        
+    }
+
+    public function chatUser(Request $request)
+    {
+        $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
+        $chamado->status_id = '1';
         $chat = new Interacoe;
         $chat->user_id = session('id');
         $chat->chamado_id = $request->id_chamado;
         $chat->chat = $request->chat;
 
         $chat->save();
+        $chamado->save();
         if($this->checarAdm()){
             return redirect()->route('homeAdm');
         }elseif(!$this->checarAdm()){
@@ -209,19 +248,21 @@ class UsuarioController extends Controller{
     public function homeAdm()
     {
         if($this->checarSessao() && $this->checarAdm()){
+            $chatid = session('id_Chat');
             $name = session('name');
+            $erro = session('erroChat');
             $departamento = session('departamento');
             $topicos = Topico::all();
             $usuarios = User::all();
             $chamado = Chamado::all();
             $chat = Interacoe::all();
-            $status= Atendimento::all();
             $relacionamentos = Relacionamento::all();
             
             $data = [
+                'chatid' => $chatid,
+                'erroChat' => $erro,
                 'relacionamentos' => $relacionamentos,
                 'departamento' => $departamento,
-                'status' => $status,
                 'topicos' => $topicos,
                 'name' => $name,
                 'interacoes' => $chat,
@@ -289,6 +330,25 @@ class UsuarioController extends Controller{
             return redirect()->route('loginUser');
         }
         
+    }
+
+    public function finalizados()
+    {
+        if($this->checarSessao()){
+            $chamado = Chamado::all();
+            $id = session('id');
+            $usuarios = User::all();
+            $chat = Interacoe::all();
+            $data = [
+                'interacoes' => $chat,
+                'chamado' => $chamado,
+                'id' => $id,
+                'usuarios'=> $usuarios
+            ];
+            return view('finalizados', $data);
+        }else{
+            return redirect()->route('loginUser');
+        }
     }
 }
 

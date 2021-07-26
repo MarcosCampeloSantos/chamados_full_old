@@ -11,6 +11,10 @@ a:hover{
     color: rgb(101, 101, 189);
 }
 
+.chat_color{
+    background-color: rgba(243, 234, 234, 0.781);
+}
+
 .chat_content{
     height: 25rem;
 }
