@@ -12,6 +12,7 @@
         <div class="mb-3">
             <label class="form-label">Topicos</label>
             <select class="form-select" name="topico" aria-label="Default select example">
+                <option value=''>Selecione um Topico</option>
                 @foreach ($topicos as $item)
                     <option value="{{$item->id}}">{{$item->topicos}}</option>
                 @endforeach

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UsuarioRequest;
 use App\Models\User;
 use App\Models\Chamado;
 use App\Models\Topico;
@@ -136,13 +137,13 @@ class UsuarioController extends Controller{
     }
 
     /* Função para Criação de Usuarios*/
-    public function criar(Request $request)
+    public function criar(UsuarioRequest $request)
     {
         $usuario = new User;
         $usuario ->name = $request->cria_nome;
         $usuario ->departamento = $request->dep_user;
         $usuario ->email = $request->cria_email;
-        $usuario ->password = $request->cria_senha;
+        $usuario ->password = $request->senha;
         $usuario ->nivel = $request->nivel_user;
 
         $usuario->save();
