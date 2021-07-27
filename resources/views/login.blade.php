@@ -1,6 +1,6 @@
 @extends('styles.home')
 
-@section('title','Chamados-Login')
+@section('title','Chamados Login')
 
 @section('name','Login')
 

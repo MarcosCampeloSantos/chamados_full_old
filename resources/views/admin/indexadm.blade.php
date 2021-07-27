@@ -1,6 +1,6 @@
 @extends('styles.home')
 
-@section('title','Chamados-Home')
+@section('title','Chamados Home')
 
 @section('name','Chamados')
 
@@ -18,9 +18,9 @@
             <a href="{{route('sair')}}" class="btn btn-primary btn-sm mt-3"><i class="fas fa-door-open"></i> Sair</a>
         </div>
     </div>
-    <a href="{{route('chamado')}}" class="style-card hvr-bob cor-cartao1 cartao rounded-2 text-center">Criar um novo chamado</a>
+    <a href="{{route('chamado')}}" class="style-card hvr-bob cor-cartao1 cartao rounded-2 text-center">Criar um novo Chamado</a>
     <a href="{{route('usuarios')}}" class="style-card hvr-bob cor-cartao2 cartao rounded-2 text-center">Criar e Editar Usuarios</a>
-    <a href="{{route('finalizados')}}" class="style-card hvr-bob cor-cartao3 cartao rounded-2 text-center">Chamados Finalizados</a>
+    <a href="{{route('finalizadosadm')}}" class="style-card hvr-bob cor-cartao3 cartao rounded-2 text-center">Chamados Finalizados</a>
 </div>
 
 {{---------------------LISTAGEM DE TODOS OS CHAMADOS EM ABERTO------------------------}}
@@ -59,8 +59,10 @@
                                     <td><span class="badge bg-success">Aberto</span></td>
                                 @elseif($item->status_id == '2')
                                     <td><span class="badge bg-danger">Fechado</span></td>
+                                @elseif($item->status_id == '3')
+                                    <td><span class="badge bg-warning text-dark">Em Atendimento</span></td>
                                 @else
-                                    <td><span class="badge bg-warning text-dark">Pausado</span></td>
+                                    <td><span class="badge bg-info text-dark">Pausado</span></td>
                                 @endif
                                 <td >{{$item->name}}</td>
                                 <td>
@@ -112,8 +114,10 @@
                                                 <td><span class="badge bg-success">Aberto</span></td>
                                             @elseif($item->status_id == '2')
                                                 <td><span class="badge bg-danger">Fechado</span></td>
+                                            @elseif($item->status_id == '3')
+                                                <td><span class="badge bg-warning text-dark">Em Atendimento</span></td>
                                             @else
-                                                <td><span class="badge bg-warning text-dark">Pausado</span></td>
+                                                <td><span class="badge bg-info text-dark">Pausado</span></td>
                                             @endif
                                             <td >{{$item->name}}</td>
                                             <td>
@@ -196,11 +200,15 @@
                                     <div class="row">
                                         <input type="hidden" name="id_chamado" value="{{$item->id}}">
                                         <input type="hidden" name="id_Chat" id="id_Chat" value="#exampleModal{{$item->id}}">
+                                        <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">
                                         <div class="col">
                                             <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
-                                                <option value="1">Aberto</option>
+                                                {{--<option value="1">Aberto</option>--}}
                                                 <option value="2">Fechado</option>
-                                                <option value="3">Pausado</option>
+                                                <option value="3">Em Atendimento</option>
+                                                <option value="4">Pausado</option>
+                                                
+
                                             </select>
                                         </div>
                                         <div class="col">

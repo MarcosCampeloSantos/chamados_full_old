@@ -1,6 +1,6 @@
 @extends('styles.home')
 
-@section('title','Chamados-Criar')
+@section('title','Chamados Criar')
 @section('name','Criação e Edição de Usuario')
 
 @section('content')

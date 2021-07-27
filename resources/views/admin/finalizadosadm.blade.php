@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 @foreach ($chamado as $item)
-                    @if ($id == $item->user_id && $item->status_id == '2')
+                    @if ($item->status_id == '2')
                         <tr>
                             <th scope="row">{{$item->id}}</th>
                             @if ($item->status_id == '2')
@@ -80,7 +80,7 @@
                                                 @endif
                                                 <div class="col">
                                                     <p class="fs-6 fw-light text-end mt-4">{{$item->created_at}}</p>
-                                                </div>                                          
+                                                </div>      
                                             </div>
                                         </div>
                                     @endif
@@ -93,6 +93,14 @@
                                     <div class="row">
                                         <input type="hidden" name="id_Chat" id="id_Chat" value="#exampleModal{{$item->id}}">
                                         <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">
+                                        <div class="col">
+                                            <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                                <option value="1">Aberto</option>
+                                                <option value="2">Fechado</option>
+                                                <option value="3">Em Atendimento</option>
+                                                <option value="4">Pausado</option>
+                                            </select>
+                                        </div>
                                         <div class="col">
                                             <button class="btn btn-primary" type="submit">Enviar</button>
                                         </div>

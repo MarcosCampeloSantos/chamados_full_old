@@ -52,6 +52,7 @@ class UsuarioController extends Controller{
         return redirect()->route('loginUser');
     }
 
+    /* Função para Criação de Topicos de Atendimento */
     public function criarTop(Request $request)
     {
         $topicos = new Topico;
@@ -114,52 +115,29 @@ class UsuarioController extends Controller{
     public function envChat(Request $request)
     {
         $texto = $request->chat;
+        $url = $request->url_ver;
         if (!empty($texto)) {
             $chat = new Interacoe;
             $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
-            $chamado->status_id = $request->status_chamado;
+            if($this->checarAdm()){
+                $chamado->status_id = $request->status_chamado;
+            }elseif(!$this->checarAdm()){
+                $chamado->status_id = '1';
+            }
             $chat->user_id = session('id');
             $chat->chamado_id = $request->id_chamado;
             $chat->chat = $request->chat;
 
             $chat->save();
             $chamado->save();
-            if($this->checarAdm()){
-                return redirect()->route('homeAdm');
-            }elseif(!$this->checarAdm()){
-                return redirect()->route('acompanhar');
-            }
+            return redirect()->route($url);
         }else{
-            if($this->checarAdm()){
-                session()->flash('id_Chat', $request->id_Chat);
-                session()->flash('erroChat', 'Digite uma Mensagem!');
-                return redirect()->route('homeAdm');
-            }elseif(!$this->checarAdm()){
-                session()->flash('id_Chat', $request->id_Chat);
-                session()->flash('erroChat', 'Digite uma Mensagem!');
-                return redirect()->route('acompanhar');
-            }
+            session()->flash('id_Chat', $request->id_Chat);
+            session()->flash('erroChat', 'Digite uma Mensagem!');
+            return redirect()->route($url);
         }
 
         
-    }
-
-    public function chatUser(Request $request)
-    {
-        $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
-        $chamado->status_id = '1';
-        $chat = new Interacoe;
-        $chat->user_id = session('id');
-        $chat->chamado_id = $request->id_chamado;
-        $chat->chat = $request->chat;
-
-        $chat->save();
-        $chamado->save();
-        if($this->checarAdm()){
-            return redirect()->route('homeAdm');
-        }elseif(!$this->checarAdm()){
-            return redirect()->route('acompanhar');
-        }
     }
 
     /* Função para Checagem se é um Usuario*/
@@ -315,11 +293,15 @@ class UsuarioController extends Controller{
     public function acompanharChamados()
     {
         if($this->checarSessao()){
-            $chamado = Chamado::all();
+            $erro = session('erroChat');
             $id = session('id');
+            $chatid = session('id_Chat');
+            $chamado = Chamado::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
             $data = [
+                'chatid' => $chatid,
+                'erroChat' => $erro,
                 'interacoes' => $chat,
                 'chamado' => $chamado,
                 'id' => $id,
@@ -335,17 +317,44 @@ class UsuarioController extends Controller{
     public function finalizados()
     {
         if($this->checarSessao()){
-            $chamado = Chamado::all();
+            $erro = session('erroChat');
             $id = session('id');
+            $chatid = session('id_Chat');
+            $chamado = Chamado::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
             $data = [
+                'chatid' => $chatid,
+                'erroChat' => $erro,
                 'interacoes' => $chat,
                 'chamado' => $chamado,
                 'id' => $id,
                 'usuarios'=> $usuarios
             ];
             return view('finalizados', $data);
+        }else{
+            return redirect()->route('loginUser');
+        }
+    }
+
+    public function finalizadosAdm()
+    {
+        if($this->checarSessao()){
+            $erro = session('erroChat');
+            $id = session('id');
+            $chatid = session('id_Chat');
+            $chamado = Chamado::all();
+            $usuarios = User::all();
+            $chat = Interacoe::all();
+            $data = [
+                'chatid' => $chatid,
+                'erroChat' => $erro,
+                'interacoes' => $chat,
+                'chamado' => $chamado,
+                'id' => $id,
+                'usuarios'=> $usuarios
+            ];
+            return view('admin.finalizadosadm', $data);
         }else{
             return redirect()->route('loginUser');
         }

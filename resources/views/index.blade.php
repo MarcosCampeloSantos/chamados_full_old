@@ -1,6 +1,6 @@
 @extends('styles.home')
 
-@section('title','Chamados-Home')
+@section('title','Chamados Home')
 
 @section('name','Chamados')
 
@@ -17,9 +17,9 @@
             <a href="{{route('sair')}}" class="btn btn-primary btn-sm mt-3"><i class="fas fa-door-open"></i> Sair</a>
         </div>
     </div>
-    <a href="{{route('chamado')}}" class="style-card hvr-bob cor-cartao1 cartao rounded-2 text-center">Criar um novo chamado</a>
+    <a href="{{route('chamado')}}" class="style-card hvr-bob cor-cartao1 cartao rounded-2 text-center">Criar um novo Chamado</a>
     <a href="{{route('acompanhar')}}" class="style-card hvr-bob cor-cartao2 cartao rounded-2 text-center">Acompanhar Chamados</a>
-    <a href="#" class="style-card hvr-bob cor-cartao3 cartao rounded-2 text-center">Chamados Finalizados</a>
+    <a href="{{route('finalizados')}}" class="style-card hvr-bob cor-cartao3 cartao rounded-2 text-center">Chamados Finalizados</a>
 </div>
 @endsection
     

@@ -1,6 +1,6 @@
 @extends('styles.home')
 
-@section('title','Dashboard')
+@section('title','Chamados Dashboard')
 
 @section('name','Painel de Administração')
 
