@@ -75,7 +75,7 @@ class UsuarioController extends Controller{
 
             return redirect()->route('paineladm');
         }else{
-            session()->put('errorelacionameto', 'Relacionamento já Existe');
+            session()->flash('errorelacionameto', 'Relacionamento já Existe');
             return redirect()->route('paineladm');
         }
 
@@ -206,7 +206,6 @@ class UsuarioController extends Controller{
                 'departamento'=> $departamento
             ];
             return view('admin.paineladm', $data);
-            session()->forget('errorelacionameto');
         }elseif($this->checarSessao() && !$this->checarAdm()){
             return redirect()->route('homeUser');
         }else{
