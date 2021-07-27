@@ -43,6 +43,7 @@
                     <tr>
                         <th scope="row">Nª CHAMADO</th>
                         <th scope="row">STATUS</th>
+                        <th scope="row">TIMER</th>
                         <th scope="row">NOME</th>
                         <th scope="row">ASSUNTO</th>
                         <th scope="row">TOPICO</th>
@@ -64,6 +65,7 @@
                                 @else
                                     <td><span class="badge bg-info text-dark">Pausado</span></td>
                                 @endif
+                                <td id="counter">00:00:00 <button onclick="start()">Teste</button></td>
                                 <td >{{$item->name}}</td>
                                 <td>
                                     {{$item->title}}
@@ -96,6 +98,7 @@
                         <tr>
                             <th scope="row">Nª CHAMADO</th>
                             <th scope="row">STATUS</th>
+                            <th scope="row">TIMER</th>
                             <th scope="row">NOME</th>
                             <th scope="row">ASSUNTO</th>
                             <th scope="row">TOPICO</th>
@@ -119,6 +122,7 @@
                                             @else
                                                 <td><span class="badge bg-info text-dark">Pausado</span></td>
                                             @endif
+                                            <td >@yield('cronometro')</td>
                                             <td >{{$item->name}}</td>
                                             <td>
                                                 {{$item->title}}
@@ -207,8 +211,6 @@
                                                 <option value="2">Fechado</option>
                                                 <option value="3">Em Atendimento</option>
                                                 <option value="4">Pausado</option>
-                                                
-
                                             </select>
                                         </div>
                                         <div class="col">
