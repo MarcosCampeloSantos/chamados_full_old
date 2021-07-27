@@ -10,7 +10,7 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr class="sticky-top table-dark">
-                    <th scope="row">Nª CHAMADO</th>
+                    <th scope="row">Nª</th>
                     <th scope="row">STATUS</th>
                     <th scope="row">NOME</th>
                     <th scope="row">ASSUNTO</th>
@@ -75,7 +75,7 @@
                                             <div class="row">
                                                 @if ($item1->anexo)
                                                     <div class="col">
-                                                        <p class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i> {{$item1->anexo}}</p>
+                                                        <a class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i> {{$item1->anexo}}</a>
                                                     </div>
                                                 @endif
                                                 <div class="col">

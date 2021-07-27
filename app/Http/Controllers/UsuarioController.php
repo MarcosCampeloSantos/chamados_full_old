@@ -68,12 +68,33 @@ class UsuarioController extends Controller{
     public function criarRel(Request $request)
     {
         $relacionamentos = new Relacionamento;
-        $relacionamentos->departamentos_id = $request->rel_dep;
-        $relacionamentos->topicos_id = $request->rel_top;
+        if(!Relacionamento::where('departamentos_id', '=', $request->rel_dep)->where('topicos_id', '=', $request->rel_top)->first()){
+            $relacionamentos->departamentos_id = $request->rel_dep;
+            $relacionamentos->topicos_id = $request->rel_top;
+            $relacionamentos->save();
 
-        $relacionamentos->save();
+            return redirect()->route('paineladm');
+        }else{
+            session()->put('errorelacionameto', 'Relacionamento já Existe');
+            return redirect()->route('paineladm');
+        }
 
-        return redirect()->route('paineladm');
+        
+    }
+
+    public function editarRel(Request $request)
+    {
+        $idrel = $request->id_relacionamento;
+        $rel = Relacionamento::where('id', '=', $idrel )->first();
+        if ($rel->id == $idrel) {
+            $rel->departamentos_id = $request->rel_dep;
+            $rel->topicos_id = $request->rel_top;
+
+            $rel->save();
+            return redirect()->route('paineladm');
+        }
+
+        
     }
 
     /* Função para Criar os Departamentos */
@@ -174,15 +195,18 @@ class UsuarioController extends Controller{
     public function painelAdm()
     {
         if($this->checarSessao() && $this->checarAdm()){
+            $errorel = session('errorelacionameto');
             $relacionamentos = Relacionamento::all();
             $departamento = Departamento::all();
             $topicos = Topico::all();
             $data=[
+                'errorelacionameto' => $errorel,
                 'relacionamentos' => $relacionamentos,
                 'topicos' => $topicos,
                 'departamento'=> $departamento
             ];
             return view('admin.paineladm', $data);
+            session()->forget('errorelacionameto');
         }elseif($this->checarSessao() && !$this->checarAdm()){
             return redirect()->route('homeUser');
         }else{

@@ -33,3 +33,4 @@ Route::post('/criardep','usuariocontroller@criarDep')->name('criardep'); #Criar 
 Route::post('/criartop','usuariocontroller@criarTop')->name('criartop'); #Criar Topico de Atendimento
 Route::post('/envchat','usuariocontroller@envChat')->name('envchat'); #Enviar mensagem no chat 'Lado do ADM ou Operador'
 Route::post('/criar_rel','usuariocontroller@criarRel')->name('criar_rel'); #Criar Relacionamentro
+Route::post('/editar_rel','usuariocontroller@editarRel')->name('editar_rel'); #Criar Relacionamentro
