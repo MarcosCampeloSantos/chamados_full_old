@@ -50,7 +50,7 @@
                 <select class="form-select" name="dep_user" aria-label="Default select example">
                     <option value=''>Selecione um Departamento</option>
                     @foreach ($departamento as $item)
-                    <option value="{{$item->id}}">{{$item->departamento}}</option>
+                        <option value="{{$item->id}}">{{$item->departamento}}</option>
                     @endforeach
                 </select>
             </div>

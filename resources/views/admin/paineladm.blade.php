@@ -58,6 +58,11 @@
 </div>
 <div class="row mt-3">
   <div class="w-25 mx-auto col">
+    @isset($errorelacionameto)
+      <div class="alert alert-danger" role="alert">
+        <li>{{$errorelacionameto}}</li>
+      </div>
+    @endisset
     <h5 class="text-center">Relacionamentos</h6>
     <div class="overflow-auto border rounded-3 listagem-dp">
       <table class="table table-striped table-hover">
@@ -88,7 +93,7 @@
                 @endforeach
               </td>
               <td>
-                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#rel">
+                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#editrel{{$item->id}}">
                   Editar
                 </button>
               </td>
@@ -182,4 +187,39 @@
     </div>
   </div>
 </div>
+@foreach ($relacionamentos as $item)
+  <div class="modal fade" id="editrel{{$item->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Editar Relacionamento {{$item->id}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{route('editar_rel')}}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label class="form-label">Departamento</label>
+                <select class="form-select" name="rel_dep" size="1" aria-label="size 3 select example">
+                  @foreach ($departamento as $item2)
+                    <option value="{{$item2->id}}">{{$item2->departamento}}</option>
+                  @endforeach
+                </select>
+                <input type="hidden" name="id_relacionamento" value="{{$item->id}}">
+                <label class="form-label mt-3">Relacionado a</label>
+                <select class="form-select" name="rel_top" size="1" aria-label="size 3 select example">
+                  @foreach ($topicos as $item3)
+                    <option value="{{$item3->id}}">{{$item3->topicos}}</option>
+                  @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Editar</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+@endforeach
 @endsection
