@@ -86,11 +86,14 @@ class UsuarioController extends Controller{
     {
         $idrel = $request->id_relacionamento;
         $rel = Relacionamento::where('id', '=', $idrel )->first();
-        if ($rel->id == $idrel) {
+        if ($rel->id == $idrel && !Relacionamento::where('departamentos_id', '=', $request->rel_dep)->where('topicos_id', '=', $request->rel_top)->first()) {
             $rel->departamentos_id = $request->rel_dep;
             $rel->topicos_id = $request->rel_top;
 
             $rel->save();
+            return redirect()->route('paineladm');
+        }else{
+            session()->flash('errorelacionameto', 'Relacionamento já Existe');
             return redirect()->route('paineladm');
         }
 
