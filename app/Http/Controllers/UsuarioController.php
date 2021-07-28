@@ -11,6 +11,7 @@ use App\Models\Topico;
 use App\Models\Interacoe;
 use App\Models\Relacionamento;
 use App\Models\Departamento;
+use DateTime;
 use Illuminate\Http\Request;
 
 class UsuarioController extends Controller{
@@ -140,9 +141,10 @@ class UsuarioController extends Controller{
     {
         $texto = $request->chat;
         $url = $request->url_ver;
+        $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
+
         if (!empty($texto)) {
             $chat = new Interacoe;
-            $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
             if($this->checarAdm()){
                 $chamado->status_id = $request->status_chamado;
             }elseif(!$this->checarAdm()){
@@ -154,6 +156,31 @@ class UsuarioController extends Controller{
 
             $chat->save();
             $chamado->save();
+
+            if($chamado->status_id == '3'){
+                $chamado->inicio = new DateTime(date('Y-m-d H:i:s'));
+                $chamado->save();
+            }elseif($chamado->status_id == '4'){
+                $chamado->termino = new DateTime(date('Y-m-d H:i:s'));
+                $chamado->save();
+            }
+
+            if(!empty($chamado->inicio) && !empty($chamado->termino)){
+                $data1 = '2020-01-01 00:00:00';
+                $data2 = '2020-01-01 00:00:00';
+
+                $datatime1 = new DateTime($data1);
+                $datatime2 = new DateTime($data2);
+        
+                $diff = $datatime1->diff($datatime2);
+                $horas = $diff->h + ($diff->days * 24);
+                $minutos = $horas * 60;
+
+                $chamado->tempototal = $minutos;
+                $chamado->save();
+            }
+            
+
             return redirect()->route($url);
         }else{
             session()->flash('id_Chat', $request->id_Chat);

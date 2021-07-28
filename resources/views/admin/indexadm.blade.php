@@ -65,7 +65,7 @@
                                 @else
                                     <td><span class="badge bg-info text-dark">Pausado</span></td>
                                 @endif
-                                <td id="counter">00:00:00 <button onclick="start()">Teste</button></td>
+                                <td>{{$item->tempototal}} Min</td>
                                 <td >{{$item->name}}</td>
                                 <td>
                                     {{$item->title}}
@@ -122,7 +122,7 @@
                                             @else
                                                 <td><span class="badge bg-info text-dark">Pausado</span></td>
                                             @endif
-                                            <td >@yield('cronometro')</td>
+                                            <td ></td>
                                             <td >{{$item->name}}</td>
                                             <td>
                                                 {{$item->title}}
@@ -191,7 +191,6 @@
                                                 <div class="col">
                                                     <p class="fs-6 fw-light text-end mt-4">{{$item->created_at}}</p>
                                                 </div>
-                                                
                                             </div>
                                         </div>
                                     @endif
