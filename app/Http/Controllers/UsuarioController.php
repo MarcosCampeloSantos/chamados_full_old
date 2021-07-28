@@ -158,25 +158,23 @@ class UsuarioController extends Controller{
             $chamado->save();
 
             if($chamado->status_id == '3'){
-                $chamado->inicio = new DateTime(date('Y-m-d H:i:s'));
+                $databanco1 = new DateTime(date('Y/m/d H:i:s'));
+                $chamado->inicio = $databanco1->format('Y/m/d H:i:s');
                 $chamado->save();
             }elseif($chamado->status_id == '4'){
-                $chamado->termino = new DateTime(date('Y-m-d H:i:s'));
+                $databanco2 = new DateTime(date('Y/m/d H:i:s'));
+                $chamado->termino = $databanco2->format('Y/m/d H:i:s');
                 $chamado->save();
             }
 
             if(!empty($chamado->inicio) && !empty($chamado->termino)){
-                $data1 = '2020-01-01 00:00:00';
-                $data2 = '2020-01-01 00:00:00';
 
-                $datatime1 = new DateTime($data1);
-                $datatime2 = new DateTime($data2);
-        
+                $datatime1 = new DateTime($chamado->inicio);
+                $datatime2 = new DateTime($chamado->termino);
+
                 $diff = $datatime1->diff($datatime2);
-                $horas = $diff->h + ($diff->days * 24);
-                $minutos = $horas * 60;
-
-                $chamado->tempototal = $minutos;
+                $horas = sprintf("%02d", $diff->d) .':'. sprintf("%02d", $diff->h) .':'. sprintf("%02d", $diff->i) .':'. sprintf("%02d", $diff->s);
+                $chamado->tempototal = $horas;
                 $chamado->save();
             }
             

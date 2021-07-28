@@ -65,7 +65,7 @@
                                 @else
                                     <td><span class="badge bg-info text-dark">Pausado</span></td>
                                 @endif
-                                <td>{{$item->tempototal}} Min</td>
+                                <td>{{$item->tempototal}}</td>
                                 <td >{{$item->name}}</td>
                                 <td>
                                     {{$item->title}}
