@@ -43,7 +43,7 @@
                     <tr>
                         <th scope="row">Nª</th>
                         <th scope="row">STATUS</th>
-                        <th scope="row">TIMER</th>
+                        <th scope="row">ATENDIMENTO</th>
                         <th scope="row">NOME</th>
                         <th scope="row">ASSUNTO</th>
                         <th scope="row">TOPICO</th>
@@ -65,7 +65,17 @@
                                 @else
                                     <td><span class="badge bg-info text-dark">Pausado</span></td>
                                 @endif
-                                <td>{{$item->tempototal}}</td>
+                                <td>
+                                    <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                        @foreach ($tempo as $item2)
+                                                @if ($item->id == $item2->chamado_id)
+                                                    <option>Pausa: {{$item2->tempototal}}</option>     
+                                                @endif
+                                        @endforeach
+                                    </select> 
+                                </td>
+                                
+                                
                                 <td >{{$item->name}}</td>
                                 <td>
                                     {{$item->title}}

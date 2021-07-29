@@ -20,9 +20,6 @@ class CreateChamadosTable extends Migration
             $table->string('title');
             $table->string('name');
             $table->string('topico');
-            $table->string('inicio')->nullable($value = true);
-            $table->string('termino')->nullable($value = true);
-            $table->string('tempototal')->nullable($value = true);
             $table->timestamps();
         });
     }
