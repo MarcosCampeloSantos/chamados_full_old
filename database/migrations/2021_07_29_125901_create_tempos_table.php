@@ -19,6 +19,8 @@ class CreateTemposTable extends Migration
             $table->string('inicio')->nullable($value = true);
             $table->string('termino')->nullable($value = true);
             $table->string('tempototal')->nullable($value = true);
+            $table->string('finalizado')->nullable($value = true);
+            $table->string('tempototal_id')->nullable($value = true);
             $table->string('pausado')->nullable($value = true);
             $table->timestamps();
         });

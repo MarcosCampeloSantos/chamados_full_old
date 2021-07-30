@@ -69,13 +69,14 @@
                                     <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
                                         @foreach ($tempo as $item2)
                                                 @if ($item->id == $item2->chamado_id)
-                                                    <option>Pausa: {{$item2->tempototal}}</option>     
+                                                    <option>Pausa: {{$item2->tempototal}}</option>
+                                                    @if($item2->pausado == '2')
+                                                        <option selected> Tempo Total: {{$item2->finalizado}}</option>
+                                                    @endif     
                                                 @endif
                                         @endforeach
                                     </select> 
                                 </td>
-                                
-                                
                                 <td >{{$item->name}}</td>
                                 <td>
                                     {{$item->title}}
