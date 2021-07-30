@@ -133,7 +133,18 @@
                                             @else
                                                 <td><span class="badge bg-info text-dark">Pausado</span></td>
                                             @endif
-                                            <td ></td>
+                                            <td>
+                                                <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                                    @foreach ($tempo as $item2)
+                                                            @if ($item->id == $item2->chamado_id)
+                                                                <option>Pausa: {{$item2->tempototal}}</option>
+                                                                @if($item2->pausado == '2')
+                                                                    <option selected> Tempo Total: {{$item2->finalizado}}</option>
+                                                                @endif     
+                                                            @endif
+                                                    @endforeach
+                                                </select> 
+                                            </td>
                                             <td >{{$item->name}}</td>
                                             <td>
                                                 {{$item->title}}
@@ -218,9 +229,17 @@
                                         <div class="col">
                                             <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
                                                 {{--<option value="1">Aberto</option>--}}
-                                                <option value="2">Fechado</option>
-                                                <option value="3">Em Atendimento</option>
-                                                <option value="4">Pausado</option>
+                                                    @isset($pause)
+                                                        @if ($pause == '0')
+                                                            <option value="2">Fechar</option>
+                                                        @endif
+                                                    @endisset
+                                                    @if ($item->status_id != '3')
+                                                        <option value="3">Em Atendimento</option>
+                                                    @endif
+                                                    @if ($item->status_id != '4')
+                                                        <option value="4">Pausar</option>
+                                                    @endif
                                             </select>
                                         </div>
                                         <div class="col">

@@ -108,10 +108,8 @@
                                         <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">
                                         <div class="col">
                                             <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
-                                                <option value="1">Aberto</option>
-                                                <option value="2">Fechado</option>
-                                                <option value="3">Em Atendimento</option>
-                                                <option value="4">Pausado</option>
+                                                <option value="1">Abrir</option>
+                                                <option value="3">Iniciar Atendimento</option>
                                             </select>
                                         </div>
                                         <div class="col">
