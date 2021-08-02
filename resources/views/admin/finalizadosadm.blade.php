@@ -13,7 +13,7 @@
                     <th scope="row">Nª</th>
                     <th scope="row">STATUS</th>
                     <th scope="row">ATENDIMENTO</th>
-                    <th scope="row">NOME</th>
+                    <th scope="row">CRIADO POR</th>
                     <th scope="row">ASSUNTO</th>
                     <th scope="row">DATA</th>
                     <th scope="row"></th>

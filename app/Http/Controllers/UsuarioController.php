@@ -32,12 +32,13 @@ class UsuarioController extends Controller{
             session()->put('nivel', @$usuarios->nivel);
             session()->put('departamento', @$usuarios->departamento);
 
-            if(@$usuarios->nivel =='1'){
+            if(@$usuarios->nivel == '1'){
                 return redirect()->route('homeAdm');
-            }else{
+            }elseif(@$usuarios->nivel == '2'){
                 return redirect()->route('homeUser');
+            }elseif(@$usuarios->nivel == '3'){
+                return redirect()->route('homeSup');
             }
-
         }elseif(User::where('email', '!=', $login)->first()){
             session()->flash('erro', 'Usuario Não Existe');
             return redirect()->route('loginUser');
@@ -118,6 +119,7 @@ class UsuarioController extends Controller{
         $chamado = new Chamado;
         $chat = new Interacoe;
 
+        $chamado->departamento = session('departamento');
         $chamado->status_id = '1';
         $chamado->title = $request->titulo;
         $chamado->topico = $request->topico;
@@ -149,7 +151,7 @@ class UsuarioController extends Controller{
         if (!empty($request->chat)) {
             if($this->checarAdm()){
                 $chamado->status_id = $request->status_chamado;
-            }elseif(!$this->checarAdm()){
+            }elseif(!$this->checarAdm() && $chamado->status_id == '2'){
                 $chamado->status_id = '1';
             }
             $chat->user_id = session('id');
@@ -381,10 +383,14 @@ class UsuarioController extends Controller{
             $erro = session('erroChat');
             $id = session('id');
             $chatid = session('id_Chat');
+            $nivel = session('nivel');
+            $departamento = session('departamento');
             $chamado = Chamado::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
             $data = [
+                'departamento' => $departamento,
+                'nivel' => $nivel,
                 'chatid' => $chatid,
                 'erroChat' => $erro,
                 'interacoes' => $chat,
@@ -403,12 +409,16 @@ class UsuarioController extends Controller{
     {
         if($this->checarSessao()){
             $erro = session('erroChat');
+            $nivel = session('nivel');
             $id = session('id');
             $chatid = session('id_Chat');
+            $departamento = session('departamento');
             $chamado = Chamado::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
             $data = [
+                'nivel' => $nivel,
+                'departamento' => $departamento,
                 'chatid' => $chatid,
                 'erroChat' => $erro,
                 'interacoes' => $chat,
@@ -445,6 +455,17 @@ class UsuarioController extends Controller{
         }else{
             return redirect()->route('loginUser');
         }
+    }
+
+    public function homeSup()
+    {
+        $name = session('name');
+
+        $data = [
+            'name' => $name,
+        ];
+
+        return view('supervisor.indexsup', $data);
     }
 }
 

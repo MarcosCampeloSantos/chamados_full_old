@@ -44,7 +44,7 @@
                         <th scope="row">Nª</th>
                         <th scope="row">STATUS</th>
                         <th scope="row">ATENDIMENTO</th>
-                        <th scope="row">NOME</th>
+                        <th scope="row">CRIADO POR</th>
                         <th scope="row">ASSUNTO</th>
                         <th scope="row">TOPICO</th>
                         <th scope="row">DATA DE CRIAÇÃO</th>
@@ -60,9 +60,9 @@
                                     <td><span class="badge bg-success">Aberto</span></td>
                                 @elseif($item->status_id == '2')
                                     <td><span class="badge bg-danger">Fechado</span></td>
-                                @elseif($item->status_id == '3')
+                                @elseif($item->status_id == '3' || $item->status_id == '5')
                                     <td><span class="badge bg-warning text-dark">Em Atendimento</span></td>
-                                @else
+                                @elseif($item->status_id == '4')
                                     <td><span class="badge bg-info text-dark">Pausado</span></td>
                                 @endif
                                 <td>
@@ -115,7 +115,7 @@
                             <th scope="row">Nª</th>
                             <th scope="row">STATUS</th>
                             <th scope="row">ATENDIMENTO</th>
-                            <th scope="row">NOME</th>
+                            <th scope="row">CRIADO POR</th>
                             <th scope="row">ASSUNTO</th>
                             <th scope="row">TOPICO</th>
                             <th scope="row">DATA DE CRIAÇÃO</th>
@@ -133,9 +133,9 @@
                                                 <td><span class="badge bg-success">Aberto</span></td>
                                             @elseif($item->status_id == '2')
                                                 <td><span class="badge bg-danger">Fechado</span></td>
-                                            @elseif($item->status_id == '3')
+                                            @elseif($item->status_id == '3' || $item->status_id == '5')
                                                 <td><span class="badge bg-warning text-dark">Em Atendimento</span></td>
-                                            @else
+                                            @elseif($item->status_id == '4')
                                                 <td><span class="badge bg-info text-dark">Pausado</span></td>
                                             @endif
                                             <td>
@@ -247,7 +247,7 @@
                             <div>
                                 <form action="{{route('envchat')}}" method="POST">
                                     @csrf
-                                    @if ($item->status_id != '1' && $item->status_id < '4')
+                                    @if ($item->status_id == '2' || $item->status_id == '3' || $item->status_id == '5')
                                         <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" placeholder="Digite o Aqui..."></textarea>
                                     @endif
                                     <div class="row mt-3">
@@ -256,23 +256,26 @@
                                         <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">
                                         <div class="col">
                                                 <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
-                                                    @if ($item->status_id != '4' && $item->status_id != '1' && $item->status_id != '2')
+                                                    @if ($item->status_id == '3' || $item->status_id == '5')
                                                         <option value="2">Fechar</option>
                                                     @endif
-                                                    @if ($item->status_id != '3')
-                                                        <option value="3">Em Atendimento</option>
+                                                    @if ($item->status_id != '3' && $item->status_id != '5')
+                                                        <option value="3">Iniciar Atendimento</option>
                                                     @endif
                                                     @if ($item->status_id != '4' && $item->status_id != '1')
-                                                        <option selected value="4">Pausar</option>
+                                                        <option value="4">Pausar</option>
+                                                    @endif
+                                                    @if ($item->status_id == '3' || $item->status_id == '5')
+                                                        <option value="5" selected>Mensagem</option>
                                                     @endif
                                                 </select>
                                         </div>
                                         <div class="col">
                                             <button class="btn btn-primary" type="submit">
-                                                @if ($item->status_id != '3')
+                                                @if ($item->status_id == '1' || $item->status_id == '4')
                                                     Inicar
                                                 @endif
-                                                @if ($item->status_id == '3' || $item->status_id != '4' &&  $item->status_id != '1')
+                                                @if ($item->status_id == '5' || $item->status_id == '3')
                                                     Enviar
                                                 @endif
                                             </button>

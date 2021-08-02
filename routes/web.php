@@ -24,6 +24,7 @@ Route::get('/sair','usuariocontroller@sair')->name('sair'); #Deslogar do Usuario
 Route::get('/paineladm','usuariocontroller@painelAdm')->name('paineladm'); #Deslogar do Usuario
 Route::get('/finalizados','usuariocontroller@finalizados')->name('finalizados'); #Tela de Chamados finalizados
 Route::get('/finalizadosadm','usuariocontroller@finalizadosAdm')->name('finalizadosadm'); #Tela de Chamados finalizados
+Route::get('/homeSup','usuariocontroller@homeSup')->name('homeSup'); #Tela Home do Supervisor
 
 #----POST-------
 Route::post('/criar_user', 'usuariocontroller@criar')->name('criar_user'); #Verificação de Criação de Usuario

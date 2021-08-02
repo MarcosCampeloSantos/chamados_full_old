@@ -40,9 +40,11 @@
             <div class="mb-3">
                 <label class="form-label">Nivel</label>
                 <select class="form-select overflow-auto" name="nivel_user" aria-label="Default select example">
-                    <option value=''>Selecione um Nivel de Acesso</option>
-                    <option value="1">Admin</option>
+                    <option value='' selected>Selecione um Nivel de Acesso</option>
+                    <option value="1">Administrador</option>
                     <option value="2">Usuario</option>
+                    <option value="3">Supervisor</option>
+                    <option value="4">Operador</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -101,9 +103,13 @@
                     @endforeach
                 </td>
                 @if ($item->nivel == '1')
-                <td>Administrador</td>
-                @else
-                <td>Usuario</td>
+                    <td>Administrador</td>
+                @elseif($item->nivel == '2')
+                    <td>Usuario</td>
+                @elseif($item->nivel == '3')
+                    <td>Supervisor</td>
+                @elseif($item->nivel == '4')
+                    <td>Operador</td>
                 @endif
                 <td>{{$item->created_at}}</td>
                 <td class="text-center"><a href="#"><i class="fas fa-edit"></a></i></td>

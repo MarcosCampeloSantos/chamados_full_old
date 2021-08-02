@@ -17,6 +17,7 @@ class CreateChamadosTable extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('status_id')->nullable($value = true);
+            $table->string('departamento');
             $table->string('title');
             $table->string('name');
             $table->string('topico');

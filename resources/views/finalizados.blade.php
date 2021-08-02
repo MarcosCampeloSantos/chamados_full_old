@@ -12,35 +12,61 @@
                 <tr class="sticky-top table-dark">
                     <th scope="row">Nª</th>
                     <th scope="row">STATUS</th>
-                    <th scope="row">NOME</th>
+                    <th scope="row">CRIADO POR</th>
                     <th scope="row">ASSUNTO</th>
                     <th scope="row">DATA</th>
                     <th scope="row"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($chamado as $item)
-                    @if ($id == $item->user_id && $item->status_id == '2')
-                        <tr>
-                            <th scope="row">{{$item->id}}</th>
-                            @if ($item->status_id == '2')
-                                <td><span class="badge bg-danger">Fechado</span></td>
-                            @endif
-                            <td >{{$item->name}}</td>
-                            <td>
-                                {{$item->title}}
-                                @foreach ($interacoes as $item1)
-                                    @if ($item->id == $item1->chamado_id && $item1->anexo)
-                                        <i class="fas fa-paperclip"></i>
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td>{{$item->created_at}}</td>
-                            {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
-                            <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
-                        </tr>
-                    @endif
-                @endforeach
+                @if ($nivel == '2')
+                    @foreach ($chamado as $item)
+                        @if ($id == $item->user_id && $item->status_id == '2')
+                            <tr>
+                                <th scope="row">{{$item->id}}</th>
+                                @if ($item->status_id == '2')
+                                    <td><span class="badge bg-danger">Fechado</span></td>
+                                @endif
+                                <td >{{$item->name}}</td>
+                                <td>
+                                    {{$item->title}}
+                                    @foreach ($interacoes as $item1)
+                                        @if ($item->id == $item1->chamado_id && $item1->anexo)
+                                            <i class="fas fa-paperclip"></i>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td>{{$item->created_at}}</td>
+                                {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
+                                <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endif
+                @if ($nivel == '3')
+                    @foreach ($chamado as $item)
+                        @if ($item->status_id == '2' && $item->departamento == $departamento)
+                            <tr>
+                                <th scope="row">{{$item->id}}</th>
+                                @if ($item->status_id == '2')
+                                    <td><span class="badge bg-danger">Fechado</span></td>
+                                @endif
+                                <td >{{$item->name}}</td>
+                                <td>
+                                    {{$item->title}}
+                                    @foreach ($interacoes as $item1)
+                                        @if ($item->id == $item1->chamado_id && $item1->anexo)
+                                            <i class="fas fa-paperclip"></i>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td>{{$item->created_at}}</td>
+                                {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
+                                <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endif
             </tbody>
         </table>
 
