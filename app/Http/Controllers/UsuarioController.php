@@ -144,7 +144,6 @@ class UsuarioController extends Controller{
         $chat = new Interacoe;
         $tempo = new Tempo;
         $databanco = new DateTime(date('Y/m/d H:i:s'));
-        $tempototal = Tempo::all();
         $tempopause = Tempo::where('chamado_id', '=', $request->id_chamado)->where('pausado', '=', '0')->first();
         $temposoma = 0;
         if (!empty($request->chat)) {
@@ -159,89 +158,68 @@ class UsuarioController extends Controller{
 
             $chat->save();
             $chamado->save();
-        }
-        if($chamado->status_id == '3'){
+
+            if($chamado->status_id == '4'){
+                $tempopause->termino = $databanco->format('Y/m/d H:i:s');
+                $tempopause->pausado = '1';
+                $tempopause->save();
+    
+                $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
+    
+                $tempopause->tempototal = gmdate("H:i:s", $diferenca);
+                $tempopause->save();
+                session()->put('pause', $tempopause->pausado);
+            }elseif($chamado->status_id == '2'){
+                $tempopause->termino = $databanco->format('Y/m/d H:i:s');
+                $tempopause->save();
+    
+                $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
+    
+                $tempopause->tempototal = gmdate("H:i:s", $diferenca);
+                $tempopause->save();
+    
+                $tempototal = Tempo::all();
+    
+                foreach ($tempototal as $key) {
+                    if($key->chamado_id == $chamado->id){
+                        $temposoma = $temposoma + (strtotime($key->termino) - strtotime($key->inicio));
+                    }
+                }
+                $tempopause->pausado = '2';
+                $tempopause->finalizado = gmdate("H:i:s", $temposoma);
+                $tempopause->save();
+                
+            }
+            
+            return redirect()->route($request->url_ver);
+
+        }elseif($chamado->status_id == '1' || $chamado->status_id == '4'){
+            if($this->checarAdm()){
+                $chamado->status_id = $request->status_chamado;
+            }elseif(!$this->checarAdm()){
+                $chamado->status_id = '1';
+            }
+            $chat->user_id = session('id');
+            $chat->chamado_id = $request->id_chamado;
+            $chat->chat = 'iniciou o Atendimento!';
+            $chat->inicio = '1';
+            $chat->save();
+            $chamado->save();
+
             $tempo->chamado_id = $chamado->id;
             $tempo->pausado = '0';
             $tempo->inicio = $databanco->format('Y/m/d H:i:s');
             $tempo->save();
             $tempopause = Tempo::where('chamado_id', '=', $request->id_chamado)->where('pausado', '=', '0')->first();
             session()->put('pause', $tempopause->pausado);
-        }elseif($chamado->status_id == '4'){
-            $tempopause->termino = $databanco->format('Y/m/d H:i:s');
-            $tempopause->pausado = '1';
-            $tempopause->save();
-
-            $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
-
-            $tempopause->tempototal = gmdate("H:i:s", $diferenca);
-            $tempopause->save();
-            session()->put('pause', $tempopause->pausado);
-        }elseif($chamado->status_id == '2'){
-            $tempopause->termino = $databanco->format('Y/m/d H:i:s');
-            $tempopause->save();
-
-            $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
-
-            $tempopause->tempototal = gmdate("H:i:s", $diferenca);
-            $tempopause->save();
-
-            foreach ($tempototal as $key) {
-                if($key->chamado_id == $chamado->id){
-                    echo "$key->termino e $key->inicio<br>";
-                    $diferenca = strtotime($key->termino) - strtotime($key->inicio);
-                    echo "$diferenca<br>";
-                }
-            }
-            $tempopause->pausado = '2';
-            $tempopause->finalizado = gmdate("H:i:s", $temposoma);
-            $tempopause->save();
-            
+            return redirect()->route($request->url_ver);
         }
-        #return redirect()->route($request->url_ver);
-
-
-
-
-
-
-
-
-            /*if($chamado->status_id == '3' && $chamado->pausado != '1'){
-                $databanco1 = new DateTime(date('Y/m/d H:i:s'));
-                $chamado->inicio = $databanco1->format('Y/m/d H:i:s');
-                $chamado->save();
-            }elseif($chamado->status_id == '3' && $chamado->pausado == '1'){
-                $databanco1 = new DateTime(date('Y/m/d H:i:s'));
-                $chamado->inicio = $databanco1->format('Y/m/d H:i:s');
-                $chamado->save();
-            }
-            elseif($chamado->status_id == '4'){
-                $databanco2 = new DateTime(date('Y/m/d H:i:s'));
-                $chamado->termino = $databanco2->format('Y/m/d H:i:s');
-                $chamado->pausado = '1';
-                $chamado->save();
-            }
-
-            if(!empty($chamado->inicio) && !empty($chamado->termino)){
-
-                $datatime1 = new DateTime($chamado->inicio);
-                $datatime2 = new DateTime($chamado->termino);
-
-                $diff = $datatime1->diff($datatime2);
-                $horas = sprintf("%02d", $diff->d) .':'. sprintf("%02d", $diff->h) .':'. sprintf("%02d", $diff->i) .':'. sprintf("%02d", $diff->s);
-                $chamado->tempototal = $horas;
-                $chamado->save();
-            }
-            
-
-            return redirect()->route($url);
-        }else{
+        else{
             session()->flash('id_Chat', $request->id_Chat);
             session()->flash('erroChat', 'Digite uma Mensagem!');
             return redirect()->route($request->url_ver);
-        }*/
-    }
+        }
+    } 
 
     /* Função para Checagem se é um Usuario*/
     private function checarSessao()
@@ -333,7 +311,6 @@ class UsuarioController extends Controller{
         if($this->checarSessao() && $this->checarAdm()){
             $chatid = session('id_Chat');
             $name = session('name');
-            $pause = session('pause');
             $erro = session('erroChat');
             $departamento = session('departamento');
             $topicos = Topico::all();
@@ -344,7 +321,6 @@ class UsuarioController extends Controller{
             $relacionamentos = Relacionamento::all();
             
             $data = [
-                'pause' => $pause,
                 'tempo' => $tempo,
                 'chatid' => $chatid,
                 'erroChat' => $erro,

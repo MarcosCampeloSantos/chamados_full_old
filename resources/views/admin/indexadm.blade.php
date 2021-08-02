@@ -66,14 +66,19 @@
                                     <td><span class="badge bg-info text-dark">Pausado</span></td>
                                 @endif
                                 <td>
-                                    <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                    <select class="form-select" name="status_chamado" aria-label="Default select example">
                                         @foreach ($tempo as $item2)
-                                                @if ($item->id == $item2->chamado_id)
-                                                    <option>Pausa: {{$item2->tempototal}}</option>
-                                                    @if($item2->pausado == '2')
-                                                        <option selected> Tempo Total: {{$item2->finalizado}}</option>
-                                                    @endif     
+                                            @if ($item->id == $item2->chamado_id)
+                                                @if ($item2->tempototal == NULL)
+                                                    <option selected>Calculando...</option>
                                                 @endif
+                                                @if ($item2->tempototal != NULL)
+                                                    <option selected>{{$item2->tempototal}}</option>
+                                                @endif
+                                                @if($item2->pausado == '2')
+                                                    <option selected> Tempo: {{$item2->finalizado}}</option>
+                                                @endif     
+                                            @endif
                                         @endforeach
                                     </select> 
                                 </td>
@@ -109,7 +114,7 @@
                         <tr>
                             <th scope="row">Nª</th>
                             <th scope="row">STATUS</th>
-                            <th scope="row">TIMER</th>
+                            <th scope="row">ATENDIMENTO</th>
                             <th scope="row">NOME</th>
                             <th scope="row">ASSUNTO</th>
                             <th scope="row">TOPICO</th>
@@ -134,12 +139,17 @@
                                                 <td><span class="badge bg-info text-dark">Pausado</span></td>
                                             @endif
                                             <td>
-                                                <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                                <select class="form-select" name="status_chamado" aria-label="Default select example">
                                                     @foreach ($tempo as $item2)
                                                             @if ($item->id == $item2->chamado_id)
-                                                                <option>Pausa: {{$item2->tempototal}}</option>
+                                                                @if ($item2->tempototal == NULL)
+                                                                    <option selected>Calculando...</option>
+                                                                @endif
+                                                                @if ($item2->tempototal != NULL)
+                                                                    <option selected>{{$item2->tempototal}}</option>
+                                                                @endif
                                                                 @if($item2->pausado == '2')
-                                                                    <option selected> Tempo Total: {{$item2->finalizado}}</option>
+                                                                    <option selected> Tempo: {{$item2->finalizado}}</option>
                                                                 @endif     
                                                             @endif
                                                     @endforeach
@@ -196,54 +206,76 @@
                             @endisset
                             <div class="chat chat_content p-3 overflow-auto">
                                 @foreach ($interacoes as $item1)
-                                    @if ($item1->chamado_id == $item->id)
-                                        <div class="mb-3 chat_color shadow p-3 rounded">
-                                            @foreach ($usuarios as $item3)
-                                                @if ($item1->user_id == $item3->id)
-                                                    <p><b>{{$item3->name}}</b></p>
-                                                @endif
-                                            @endforeach
-                                            <p class="text-break">{{$item1->chat}}</p>
-                                            <div class="row">
-                                                @if ($item1->anexo)
+                                    @if ($item1->inicio != '1')
+                                        @if ($item1->chamado_id == $item->id)
+                                            <div class="mb-3 chat_color shadow p-3 rounded">
+                                                @foreach ($usuarios as $item3)
+                                                    @if ($item1->user_id == $item3->id)
+                                                        <p><b>{{$item3->name}}</b></p>
+                                                    @endif
+                                                @endforeach
+                                                <p class="text-break">{{$item1->chat}}</p>
+                                                <div class="row">
+                                                    @if ($item1->anexo)
+                                                        <div class="col">
+                                                            <a class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i>{{$item1->anexo}}</a>
+                                                        </div>
+                                                    @endif
                                                     <div class="col">
-                                                        <a class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i>{{$item1->anexo}}</a>
+                                                        <p class="fs-6 fw-light text-end mt-4">{{$item1->created_at}}</p>
                                                     </div>
-                                                @endif
-                                                <div class="col">
-                                                    <p class="fs-6 fw-light text-end mt-4">{{$item->created_at}}</p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endif
+                                    @if ($item1->chamado_id == $item->id)
+                                        @if ($item1->inicio == '1')
+                                            <div class="mb-3 chat_color shadow p-3 rounded text-center chat_color_inicio">
+                                                <p class="text-break">
+                                                    @foreach ($usuarios as $item3)
+                                                        @if ($item1->user_id == $item3->id)
+                                                            {{$item3->name}}
+                                                        @endif
+                                                    @endforeach
+                                                    {{$item1->chat}}
+                                                </p>
+                                            </div>
+                                        @endif
+                                    @endif 
                                 @endforeach  
                             </div>
                             <div>
                                 <form action="{{route('envchat')}}" method="POST">
                                     @csrf
-                                    <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" placeholder="Digite o Aqui..."></textarea>
-                                    <div class="row">
+                                    @if ($item->status_id != '1' && $item->status_id < '4')
+                                        <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" placeholder="Digite o Aqui..."></textarea>
+                                    @endif
+                                    <div class="row mt-3">
                                         <input type="hidden" name="id_chamado" value="{{$item->id}}">
                                         <input type="hidden" name="id_Chat" id="id_Chat" value="#exampleModal{{$item->id}}">
                                         <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">
                                         <div class="col">
-                                            <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
-                                                {{--<option value="1">Aberto</option>--}}
-                                                    @isset($pause)
-                                                        @if ($pause == '0')
-                                                            <option value="2">Fechar</option>
-                                                        @endif
-                                                    @endisset
+                                                <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                                    @if ($item->status_id != '4' && $item->status_id != '1' && $item->status_id != '2')
+                                                        <option value="2">Fechar</option>
+                                                    @endif
                                                     @if ($item->status_id != '3')
                                                         <option value="3">Em Atendimento</option>
                                                     @endif
-                                                    @if ($item->status_id != '4')
-                                                        <option value="4">Pausar</option>
+                                                    @if ($item->status_id != '4' && $item->status_id != '1')
+                                                        <option selected value="4">Pausar</option>
                                                     @endif
-                                            </select>
+                                                </select>
                                         </div>
                                         <div class="col">
-                                            <button class="btn btn-primary" type="submit">Enviar</button>
+                                            <button class="btn btn-primary" type="submit">
+                                                @if ($item->status_id != '3')
+                                                    Inicar
+                                                @endif
+                                                @if ($item->status_id == '3' || $item->status_id != '4' &&  $item->status_id != '1')
+                                                    Enviar
+                                                @endif
+                                            </button>
                                         </div>
                                     </div>
                                 </form>

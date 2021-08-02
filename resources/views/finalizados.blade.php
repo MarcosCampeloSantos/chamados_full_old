@@ -10,9 +10,8 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr class="sticky-top table-dark">
-                    <th scope="row">Nª CHAMADO</th>
+                    <th scope="row">Nª</th>
                     <th scope="row">STATUS</th>
-                    <th scope="row">ATENDIMENTO</th>
                     <th scope="row">NOME</th>
                     <th scope="row">ASSUNTO</th>
                     <th scope="row">DATA</th>
@@ -27,18 +26,6 @@
                             @if ($item->status_id == '2')
                                 <td><span class="badge bg-danger">Fechado</span></td>
                             @endif
-                            <td>
-                                <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
-                                    @foreach ($tempo as $item2)
-                                            @if ($item->id == $item2->chamado_id)
-                                                <option>Pausa: {{$item2->tempototal}}</option>
-                                                @if($item2->finalizado && $item2->pausado == '2')
-                                                    <option selected> Tempo Total: {{$item2->finalizado}}</option>
-                                                @endif    
-                                            @endif
-                                    @endforeach
-                                </select> 
-                            </td>
                             <td >{{$item->name}}</td>
                             <td>
                                 {{$item->title}}

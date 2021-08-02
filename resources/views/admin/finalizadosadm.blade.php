@@ -77,26 +77,42 @@
                             @endisset
                             <div class="chat chat_content p-3 overflow-auto">
                                 @foreach ($interacoes as $item1)
-                                    @if ($item1->chamado_id == $item->id)
-                                        <div class="mb-3 shadow p-3 chat_color rounded">
-                                            @foreach ($usuarios as $item3)
-                                                @if ($item1->user_id == $item3->id)
-                                                    <p><b>{{$item3->name}}</b></p>
-                                                @endif
-                                            @endforeach
-                                            <p class="text-break">{{$item1->chat}}</p>
-                                            <div class="row">
-                                                @if ($item1->anexo)
+                                    @if ($item1->inicio != '1')
+                                        @if ($item1->chamado_id == $item->id)
+                                            <div class="mb-3 chat_color shadow p-3 rounded">
+                                                @foreach ($usuarios as $item3)
+                                                    @if ($item1->user_id == $item3->id)
+                                                        <p><b>{{$item3->name}}</b></p>
+                                                    @endif
+                                                @endforeach
+                                                <p class="text-break">{{$item1->chat}}</p>
+                                                <div class="row">
+                                                    @if ($item1->anexo)
+                                                        <div class="col">
+                                                            <a class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i>{{$item1->anexo}}</a>
+                                                        </div>
+                                                    @endif
                                                     <div class="col">
-                                                        <a class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i> {{$item1->anexo}}</a>
+                                                        <p class="fs-6 fw-light text-end mt-4">{{$item1->created_at}}</p>
                                                     </div>
-                                                @endif
-                                                <div class="col">
-                                                    <p class="fs-6 fw-light text-end mt-4">{{$item->created_at}}</p>
-                                                </div>      
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endif
+                                    @if ($item1->chamado_id == $item->id)
+                                        @if ($item1->inicio == '1')
+                                            <div class="mb-3 chat_color shadow p-3 rounded text-center chat_color_inicio">
+                                                <p class="text-break">
+                                                    @foreach ($usuarios as $item3)
+                                                        @if ($item1->user_id == $item3->id)
+                                                            {{$item3->name}}
+                                                        @endif
+                                                    @endforeach
+                                                    {{$item1->chat}}
+                                                </p>
+                                            </div>
+                                        @endif
+                                    @endif 
                                 @endforeach  
                             </div>
                             <div>
@@ -109,7 +125,6 @@
                                         <div class="col">
                                             <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
                                                 <option value="1">Abrir</option>
-                                                <option value="3">Iniciar Atendimento</option>
                                             </select>
                                         </div>
                                         <div class="col">

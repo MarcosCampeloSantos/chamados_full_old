@@ -12,7 +12,7 @@ a:hover{
 }
 
 .chat_color{
-    background-color: rgba(243, 234, 234, 0.781);
+    background-color: rgb(255, 255, 255);
 }
 
 .chat_content{
@@ -23,12 +23,12 @@ a:hover{
     width: 29rem;
 }
 
-.chat_select{
-    width: 15rem;
-}
-
 .chat_content_interno{
     max-width: 27rem;
+}
+
+.chat_color_inicio{
+    background-color: rgb(142, 250, 214);
 }
 
 .chat{
