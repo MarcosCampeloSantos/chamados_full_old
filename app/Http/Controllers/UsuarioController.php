@@ -121,6 +121,7 @@ class UsuarioController extends Controller{
 
         $chamado->departamento = session('departamento');
         $chamado->status_id = '1';
+        $chamado->IP = $_SERVER['REMOTE_ADDR'];
         $chamado->title = $request->titulo;
         $chamado->topico = $request->topico;
         $chamado->name = session('name');
@@ -136,7 +137,7 @@ class UsuarioController extends Controller{
         $chat->save();
         
 
-        return redirect()->route('homeUser');
+        return redirect()->route('chamado');
     }
 
     /* Função para Envio de mensagens nos Chamados */
