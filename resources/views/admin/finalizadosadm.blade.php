@@ -93,7 +93,7 @@
                                                         </div>
                                                     @endif
                                                     <div class="col">
-                                                        <p class="fs-6 fw-light text-end mt-4">{{$item1->created_at}}</p>
+                                                        <p class="fs-6 fw-light text-end">{{$item1->created_at}}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -119,6 +119,7 @@
                                 <form action="{{route('envchat')}}" method="POST">
                                     @csrf
                                     <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" id="cria_email" placeholder="Digite o Aqui..."></textarea>
+                                    <input class="form-control mb-3 mx-auto" name="anexo" type="file" id="formFile">
                                     <div class="row">
                                         <input type="hidden" name="id_Chat" id="id_Chat" value="#exampleModal{{$item->id}}">
                                         <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">

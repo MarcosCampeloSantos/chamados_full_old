@@ -158,6 +158,7 @@ class UsuarioController extends Controller{
             $chat->user_id = session('id');
             $chat->chamado_id = $request->id_chamado;
             $chat->chat = $request->chat;
+            $chat->anexo = $request->anexo;
 
             $chat->save();
             $chamado->save();

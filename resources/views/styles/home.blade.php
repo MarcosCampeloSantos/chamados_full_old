@@ -17,9 +17,8 @@
             <div class="home mx-auto cor mt-5 shadow p-3 mb-5 bg-body rounded">
                 <div class="mb-4">
                     @if(Request::segment(1) != '' && Request::segment(1) != 'homeUser' && Request::segment(1) != 'homeAdm')
-                        <a class="voltar" href="{{url()->previous()}}"><i class="fas fa-arrow-circle-left fa-2x"></i></a>
+                        <a class="voltar" onclick="voltar()" href="#"><i class="fas fa-arrow-circle-left fa-2x"></i></a>
                     @endif
-                    
                     <h1 class="display-6 text-center">@yield('name')</h1>
                 </div>
                 @yield('content')
@@ -30,5 +29,10 @@
                 <p>&copy;Chamados 2021</p>
             </footer>
         </div>
+        <script>
+            function voltar() {
+                window.history.go(-1)
+            }
+        </script>
 </body>
 </html>

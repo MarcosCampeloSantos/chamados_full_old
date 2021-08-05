@@ -204,7 +204,7 @@
                                     <li>{{$erroChat}}</li>
                                 </div>
                             @endisset
-                            <div class="chat chat_content p-3 overflow-auto">
+                            <div id="rolagem" class="chat chat_content p-3 overflow-auto">
                                 @foreach ($interacoes as $item1)
                                     @if ($item1->inicio != '1')
                                         @if ($item1->chamado_id == $item->id)
@@ -222,7 +222,7 @@
                                                         </div>
                                                     @endif
                                                     <div class="col">
-                                                        <p class="fs-6 fw-light text-end mt-4">{{$item1->created_at}}</p>
+                                                        <p class="fs-6 fw-light text-end">{{$item1->created_at}}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -250,10 +250,16 @@
                                     @if ($item->status_id == '2' || $item->status_id == '3' || $item->status_id == '5')
                                         <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" placeholder="Digite o Aqui..."></textarea>
                                     @endif
+                                    @if ($item->status_id == '5' || $item->status_id == '3')
+                                        <input class="form-control m-2 mx-auto" name="anexo" type="file" id="formFile">
+                                    @endif
                                     <div class="row mt-3">
+                                        
+                                        {{--Pontes de Dados--}}
                                         <input type="hidden" name="id_chamado" value="{{$item->id}}">
                                         <input type="hidden" name="id_Chat" id="id_Chat" value="#exampleModal{{$item->id}}">
                                         <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">
+
                                         <div class="col">
                                                 <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
                                                     @if ($item->status_id == '3' || $item->status_id == '5')
