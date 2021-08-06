@@ -7,7 +7,7 @@
 @section('content')
 {{---------------------FORMULARIO PARA CRIAÇÃO DE CHAMADOS------------------------}}
 <div class="n-chamado mx-auto mb-3">
-    <form action="{{route('chamadoCriar')}}" method="POST">
+    <form action="{{route('chamadoCriar')}}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label class="form-label">Topicos</label>
@@ -19,7 +19,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label class="form-label">Tutulo</label>
+            <label class="form-label">Titulo</label>
             <input type="text" class="form-control" name="titulo" id="titulo" placeholder="Digite o Titulo">
         </div>
         <div class="mb-3">

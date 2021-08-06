@@ -218,7 +218,7 @@
                                                 <div class="row">
                                                     @if ($item1->anexo)
                                                         <div class="col">
-                                                            <a class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i>{{$item1->anexo}}</a>
+                                                            <a href="/anexo/{{$item1->anexo}}" class="fs-6 fw-light text-top mt-4"><i class="fas fa-paperclip"></i>{{$item1->nameanexo}}</a>
                                                         </div>
                                                     @endif
                                                     <div class="col">
@@ -245,7 +245,7 @@
                                 @endforeach  
                             </div>
                             <div>
-                                <form action="{{route('envchat')}}" method="POST">
+                                <form action="{{route('envchat')}}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @if ($item->status_id == '2' || $item->status_id == '3' || $item->status_id == '5')
                                         <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" placeholder="Digite o Aqui..."></textarea>

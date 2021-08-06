@@ -99,8 +99,6 @@ class UsuarioController extends Controller{
             session()->flash('errorelacionameto', 'Relacionamento já Existe');
             return redirect()->route('paineladm');
         }
-
-        
     }
 
     /* Função para Criar os Departamentos */
@@ -129,7 +127,15 @@ class UsuarioController extends Controller{
 
         $chamado->save();
 
-        $chat->anexo = $request->anexo;
+        if(!empty($request->anexo)){
+            $requestarquivo = $request->anexo;
+            $nomearquivo = $requestarquivo->getClientOriginalName();
+            $request->anexo->move(public_path('anexos'), $nomearquivo);
+
+            $chat->anexo = $nomearquivo;
+            $chat->nameanexo = $requestarquivo->getClientOriginalName();
+        }
+        
         $chat->user_id = session('id');
         $chat->chat = $request->conteudo;
         $chat->chamado_id = $chamado->id;
@@ -155,10 +161,20 @@ class UsuarioController extends Controller{
             }elseif(!$this->checarAdm() && $chamado->status_id == '2'){
                 $chamado->status_id = '1';
             }
+
+            if(!empty($request->anexo)){
+                $requestarquivo = $request->anexo;
+                $nomearquivo = $requestarquivo->getClientOriginalName();
+                $request->anexo->move(public_path('anexos'), $nomearquivo);
+    
+                $chat->anexo = $nomearquivo;
+                $chat->nameanexo = $requestarquivo->getClientOriginalName();
+            }
+
+           
             $chat->user_id = session('id');
             $chat->chamado_id = $request->id_chamado;
             $chat->chat = $request->chat;
-            $chat->anexo = $request->anexo;
 
             $chat->save();
             $chamado->save();

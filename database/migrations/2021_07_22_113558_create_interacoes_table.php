@@ -17,7 +17,7 @@ class CreateInteracoesTable extends Migration
             $table->id();
             $table->string('chamado_id');
             $table->string('chat');
-            $table->binary('anexo')->nullable($value = true);
+            $table->string('anexo')->nullable($value = true);
             $table->string('inicio')->nullable($value = true);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
