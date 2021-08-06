@@ -27,6 +27,7 @@ Route::get('/finalizadosadm','usuariocontroller@finalizadosAdm')->name('finaliza
 Route::get('/homeSup','usuariocontroller@homeSup')->name('homeSup'); #Tela Home do Supervisor
 Route::get('/homeOp','usuariocontroller@homeOp')->name('homeOp'); #Tela Home do Operador
 
+
 Route::get("/anexo/{file}", function ($file="") {
     return response()->download(public_path("anexos/".$file));
     });
