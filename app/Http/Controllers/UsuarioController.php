@@ -485,5 +485,16 @@ class UsuarioController extends Controller{
 
         return view('supervisor.indexsup', $data);
     }
+
+    public function homeOp()
+    {
+        $name = session('name');
+
+        $data = [
+            'name' => $name,
+        ];
+
+        return view('operador.indexoperador', $data);
+    }
 }
 

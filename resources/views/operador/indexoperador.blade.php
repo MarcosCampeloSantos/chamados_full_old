@@ -15,15 +15,10 @@
                 <p class="card-title text-center">Bem vindo,<b> {{$name}}</b></p>
             </div>
             <a href="{{route('paineladm')}}" class="btn btn-primary btn-sm mt-3"><i class="fas fa-tachometer-alt"></i> Painel de Administração</a>
-            <div class="row">
-                <a href="{{route('paineladm')}}" class="btn btn-primary btn-sm mt-3 m-1 col"><i class="fas fa-tachometer-alt"></i> Modo Operador</a>
-                <a href="{{route('sair')}}" class="btn btn-primary btn-sm mt-3 m-1 col"><i class="fas fa-door-open"></i> Sair</a>
-            </div>
-           
+            <a href="{{route('sair')}}" class="btn btn-primary btn-sm mt-3"><i class="fas fa-door-open"></i> Sair</a>
         </div>
     </div>
     <a href="{{route('chamado')}}" class="style-card hvr-bob cor-cartao1 cartao rounded-2 text-center">Criar um novo Chamado</a>
-    <a href="{{route('usuarios')}}" class="style-card hvr-bob cor-cartao2 cartao rounded-2 text-center">Criar e Editar Usuarios</a>
     <a href="{{route('finalizadosadm')}}" class="style-card hvr-bob cor-cartao3 cartao rounded-2 text-center">Chamados Finalizados</a>
 </div>
 
