@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\ExcluirController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,4 +41,7 @@ Route::post('/criardep','usuariocontroller@criarDep')->name('criardep'); #Criar 
 Route::post('/criartop','usuariocontroller@criarTop')->name('criartop'); #Criar Topico de Atendimento
 Route::post('/envchat','usuariocontroller@envChat')->name('envchat'); #Enviar mensagem no chat 'Lado do ADM ou Operador'
 Route::post('/criar_rel','usuariocontroller@criarRel')->name('criar_rel'); #Criar Relacionamentro
-Route::post('/editar_rel','usuariocontroller@editarRel')->name('editar_rel'); #Criar Relacionamentro
+Route::post('/editar_rel','usuariocontroller@editarRel')->name('editar_rel'); #Editar Relacionamento
+Route::post('/adicionar_atributo','usuariocontroller@adicionarAtributo')->name('adicionar_atributo'); #Editar Atributo
+Route::post('/delete_atributo','excluircontroller@deleteAtributo')->name('delete_atributo'); #Deletar Atributo
+Route::post('/excluirdep','excluircontroller@excluirDep')->name('excluirdep'); #Deletar Departamento

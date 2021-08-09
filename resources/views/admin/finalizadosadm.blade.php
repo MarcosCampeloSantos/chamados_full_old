@@ -15,7 +15,8 @@
                     <th scope="row">ATENDIMENTO</th>
                     <th scope="row">CRIADO POR</th>
                     <th scope="row">ASSUNTO</th>
-                    <th scope="row">DATA</th>
+                    <th scope="row">TOPICO</th>
+                    <th scope="row">DATA CRIAÇÃO</th>
                     <th scope="row"></th>
                 </tr>
             </thead>
@@ -45,6 +46,13 @@
                                 @foreach ($interacoes as $item1)
                                     @if ($item->id == $item1->chamado_id && $item1->anexo)
                                         <i class="fas fa-paperclip"></i>
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach ($topicos as $item1)
+                                    @if ($item->topico == $item1->id)
+                                        {{$item1->topicos}}
                                     @endif
                                 @endforeach
                             </td>

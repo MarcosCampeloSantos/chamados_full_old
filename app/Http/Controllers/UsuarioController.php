@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChatRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UsuarioRequest;
+use App\Models\Atribuicoe;
 use App\Models\User;
 use App\Models\Chamado;
 use App\Models\Tempo;
@@ -14,6 +15,7 @@ use App\Models\Relacionamento;
 use App\Models\Departamento;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller{
 
@@ -38,6 +40,8 @@ class UsuarioController extends Controller{
                 return redirect()->route('homeUser');
             }elseif(@$usuarios->nivel == '3'){
                 return redirect()->route('homeSup');
+            }elseif(@$usuarios->nivel == '4'){
+                return redirect()->route('homeOp');
             }
         }elseif(User::where('email', '!=', $login)->first()){
             session()->flash('erro', 'Usuario Não Existe');
@@ -69,12 +73,18 @@ class UsuarioController extends Controller{
     /* Função para Criando Relacionamentos */
 
     public function criarRel(Request $request)
-    {
+    {  
+        $atribuicao = new Atribuicoe;
+        $user = User::where('id', '=', $request->rel_user)->first();
         $relacionamentos = new Relacionamento;
         if(!Relacionamento::where('departamentos_id', '=', $request->rel_dep)->where('topicos_id', '=', $request->rel_top)->first()){
             $relacionamentos->departamentos_id = $request->rel_dep;
             $relacionamentos->topicos_id = $request->rel_top;
             $relacionamentos->save();
+
+            $atribuicao->id_user = $user->id;
+            $atribuicao->id_relacionamento = $relacionamentos->id;
+            $atribuicao->save();
 
             return redirect()->route('paineladm');
         }else{
@@ -88,17 +98,42 @@ class UsuarioController extends Controller{
     public function editarRel(Request $request)
     {
         $idrel = $request->id_relacionamento;
+        $atribuicao = new Atribuicoe;
+        $user = User::where('id', '=', $request->rel_user_edit)->first();
         $rel = Relacionamento::where('id', '=', $idrel )->first();
         if ($rel->id == $idrel && !Relacionamento::where('departamentos_id', '=', $request->rel_dep)->where('topicos_id', '=', $request->rel_top)->first()) {
             $rel->departamentos_id = $request->rel_dep;
             $rel->topicos_id = $request->rel_top;
-
             $rel->save();
+            if(isset($user->id)){
+                $atribuicao->id_user = $user->id;
+                $atribuicao->id_relacionamento = $rel->id;
+                $atribuicao->save();
+            }
+            
+
             return redirect()->route('paineladm');
         }else{
             session()->flash('errorelacionameto', 'Relacionamento já Existe');
             return redirect()->route('paineladm');
         }
+    }
+
+    public function adicionarAtributo(Request $request)
+    {
+
+        if (!Atribuicoe::where('id_relacionamento', '=', $request->id_relacionamento)->where('id_user', '=', $request->rel_user_edit)->first()) {
+            $atributo = new Atribuicoe();
+            $atributo->id_user = $request->rel_user_edit;
+            $atributo->id_relacionamento = $request->id_relacionamento;
+            $atributo->save();
+
+            return redirect()->route('paineladm');
+        }else{
+            session()->flash('errorelacionameto', 'Usuario já foi Atibuido a este Relacionamento!');
+            return redirect()->route('paineladm');
+        }
+        
     }
 
     /* Função para Criar os Departamentos */
@@ -254,6 +289,13 @@ class UsuarioController extends Controller{
         }
     }
 
+    public function checarOp()
+    {
+        if(session('nivel') == '4'){
+            return true;
+        }
+    }
+
     /* Função para Criação de Usuarios*/
     public function criar(UsuarioRequest $request)
     {
@@ -276,10 +318,14 @@ class UsuarioController extends Controller{
     {
         if($this->checarSessao() && $this->checarAdm()){
             $errorel = session('errorelacionameto');
+            $users = User::all();
+            $atribuicao = Atribuicoe::all();
             $relacionamentos = Relacionamento::all();
             $departamento = Departamento::all();
             $topicos = Topico::all();
             $data=[
+                'atribuicao' => $atribuicao,
+                'users' => $users,
                 'errorelacionameto' => $errorel,
                 'relacionamentos' => $relacionamentos,
                 'topicos' => $topicos,
@@ -329,10 +375,12 @@ class UsuarioController extends Controller{
     public function homeAdm()
     {
         if($this->checarSessao() && $this->checarAdm()){
+            $user_id = session('id');
             $chatid = session('id_Chat');
             $name = session('name');
             $erro = session('erroChat');
             $departamento = session('departamento');
+            $atribuicao = Atribuicoe::all();
             $topicos = Topico::all();
             $usuarios = User::all();
             $chamado = Chamado::all();
@@ -341,6 +389,8 @@ class UsuarioController extends Controller{
             $relacionamentos = Relacionamento::all();
             
             $data = [
+                'atribuicao' => $atribuicao,
+                'user_id' => $user_id,
                 'tempo' => $tempo,
                 'chatid' => $chatid,
                 'erroChat' => $erro,
@@ -431,10 +481,12 @@ class UsuarioController extends Controller{
             $id = session('id');
             $chatid = session('id_Chat');
             $departamento = session('departamento');
+            $topicos = Topico::all();
             $chamado = Chamado::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
             $data = [
+                'topicos' => $topicos,
                 'nivel' => $nivel,
                 'departamento' => $departamento,
                 'chatid' => $chatid,
@@ -454,13 +506,15 @@ class UsuarioController extends Controller{
     {
         if($this->checarSessao()){
             $erro = session('erroChat');
+            $chatid = session('id_Chat');
             $id = session('id');
             $tempo = Tempo::all();
-            $chatid = session('id_Chat');
             $chamado = Chamado::all();
+            $topicos = Topico::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
             $data = [
+                'topicos' => $topicos,
                 'tempo' => $tempo,
                 'chatid' => $chatid,
                 'erroChat' => $erro,
@@ -488,13 +542,42 @@ class UsuarioController extends Controller{
 
     public function homeOp()
     {
-        $name = session('name');
-
-        $data = [
-            'name' => $name,
-        ];
-
-        return view('operador.indexoperador', $data);
+        if($this->checarSessao() && $this->checarAdm() || $this->checarSessao() && $this->checarOp()){
+            $user_id = session('id');
+            $chatid = session('id_Chat');
+            $name = session('name');
+            $erro = session('erroChat');
+            $nivel = session('nivel');
+            $departamento = session('departamento');
+            $atribuicao = Atribuicoe::all();
+            $topicos = Topico::all();
+            $usuarios = User::all();
+            $chamado = Chamado::all();
+            $chat = Interacoe::all();
+            $tempo = Tempo::all();
+            $relacionamentos = Relacionamento::all();
+            
+            $data = [
+                'user_id' => $user_id,
+                'atribuicao' => $atribuicao,
+                'nivel' => $nivel,
+                'tempo' => $tempo,
+                'chatid' => $chatid,
+                'erroChat' => $erro,
+                'relacionamentos' => $relacionamentos,
+                'departamento' => $departamento,
+                'topicos' => $topicos,
+                'name' => $name,
+                'interacoes' => $chat,
+                'chamado'=> $chamado,
+                'usuarios'=> $usuarios
+            ];
+            return view('operador.indexoperador', $data);
+        }elseif($this->checarSessao() && !$this->checarAdm()){
+            return redirect()->route('homeUser');
+        }else{
+            return redirect()->route('loginUser');
+        }
     }
 }
 
