@@ -387,8 +387,52 @@ class UsuarioController extends Controller{
             $chat = Interacoe::all();
             $tempo = Tempo::all();
             $relacionamentos = Relacionamento::all();
+
+            $contagemalladm = 0;
+            $chamadosalladm = array();
+            foreach ($chamado as $key) {
+                if ($key->status_id != '2') {
+                    array_push($chamadosalladm, $key);
+                    $contagemalladm = $contagemalladm + 1;
+                }
+            }
+
+            $contagemadpadm = 0;
+            $chamadosdpadm = array();
+            foreach ($chamado as $key) {
+                foreach($relacionamentos as $key2){
+                    if ($key2->topicos_id == $key->topico && $key->status_id != '2') {
+                        if ($key2->departamentos_id == $departamento) {
+                            array_push($chamadosdpadm, $key);
+                            $contagemadpadm = $contagemadpadm + 1;
+                        }
+                    }
+                }
+            }
+
+            $contagematributoadm = 0;
+            $chamadosatributoadm = array();
+            foreach ($chamado as $key) {
+                foreach($relacionamentos as $key2){
+                    if ($key2->topicos_id == $key->topico) {
+                        foreach ($atribuicao as $key3) {
+                            if ($key2->id == $key3->id_relacionamento && $key3->id_user == $user_id && $key->status_id != '2') {
+                                array_push($chamadosatributoadm, $key);
+                                $contagematributoadm = $contagematributoadm + 1;
+                            }
+                        }
+                       
+                    }
+                }
+            }
             
             $data = [
+                'contagemalladm' => $contagemalladm,
+                'chamadosalladm' => $chamadosalladm,
+                'contagematributoadm' => $contagematributoadm,
+                'chamadosatributoadm' => $chamadosatributoadm,
+                'contagemadpadm' => $contagemadpadm,
+                'chamadosdpadm' => $chamadosdpadm,
                 'atribuicao' => $atribuicao,
                 'user_id' => $user_id,
                 'tempo' => $tempo,
