@@ -48,5 +48,13 @@ class ExcluirController extends Controller
             return redirect()->route('paineladm');
         }
     }
+
+    public function excluiRel(Request $request)
+    {
+        $dep = Relacionamento::where('id', '=', $request->id_rel)->first();
+        $dep->delete();
+
+        return redirect()->route('paineladm');
+    }
         
 }

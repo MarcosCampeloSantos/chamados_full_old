@@ -134,6 +134,9 @@
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editrel{{$item->id}}">
                     Editar
                   </button>
+                  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluirel{{$item->id}}">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </td>
               </tr>
             @endforeach
@@ -375,6 +378,32 @@
               <div class="mb-3 text-center">
                   <input type="hidden" name="id_topico" value="{{$item->id}}">
                   <label class="form-label">Realmente quer Excluir o Topico <b>{{$item->topicos}}</b></label>
+              </div>
+              <div class="mb-3 text-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-danger ms-3">Excluir</button>
+              </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endforeach
+
+  @foreach ($relacionamentos as $item)
+    <div class="modal fade" id="excluirel{{$item->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Excluir Atribuição</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{route('excluirel')}}" method="POST">
+              @csrf
+              <div class="mb-3 text-center">
+                  <input type="hidden" name="id_rel" value="{{$item->id}}">
+                  <label class="form-label">Realmente quer Excluir o Relacionamento <b>{{$item->id}}</b></label>
               </div>
               <div class="mb-3 text-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
