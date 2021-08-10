@@ -45,3 +45,4 @@ Route::post('/editar_rel','usuariocontroller@editarRel')->name('editar_rel'); #E
 Route::post('/adicionar_atributo','usuariocontroller@adicionarAtributo')->name('adicionar_atributo'); #Editar Atributo
 Route::post('/delete_atributo','excluircontroller@deleteAtributo')->name('delete_atributo'); #Deletar Atributo
 Route::post('/excluirdep','excluircontroller@excluirDep')->name('excluirdep'); #Deletar Departamento
+Route::post('/excluirtop','excluircontroller@excluirTop')->name('excluirtop'); #Deletar Topico

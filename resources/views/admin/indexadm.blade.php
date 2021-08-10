@@ -114,7 +114,7 @@
                             </td>
                             <td>{{$item->created_at}}</td>
                             {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
-                            <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
+                            <td><button class="btn btn-primary" onclick="rolagem()" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -278,7 +278,7 @@
                                     <li>{{$erroChat}}</li>
                                 </div>
                             @endisset
-                            <div id="rolagem" class="chat chat_content p-3 overflow-auto">
+                            <div id="scroll" class="chat chat_content p-3 overflow-auto">
                                 @foreach ($interacoes as $item1)
                                     @if ($item1->inicio != '1')
                                         @if ($item1->chamado_id == $item->id)

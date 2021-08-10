@@ -600,8 +600,41 @@ class UsuarioController extends Controller{
             $chat = Interacoe::all();
             $tempo = Tempo::all();
             $relacionamentos = Relacionamento::all();
+
+            $contagemadpop = 0;
+            $chamadosdpop= array();
+            foreach ($chamado as $key) {
+                foreach($relacionamentos as $key2){
+                    if ($key2->topicos_id == $key->topico && $key->status_id != '2') {
+                        if ($key2->departamentos_id == $departamento) {
+                            array_push($chamadosdpop, $key);
+                            $contagemadpop = $contagemadpop + 1;
+                        }
+                    }
+                }
+            }
+
+            $contagematributoop = 0;
+            $chamadosatributoop = array();
+            foreach ($chamado as $key) {
+                foreach($relacionamentos as $key2){
+                    if ($key2->topicos_id == $key->topico) {
+                        foreach ($atribuicao as $key3) {
+                            if ($key2->id == $key3->id_relacionamento && $key3->id_user == $user_id && $key->status_id != '2') {
+                                array_push($chamadosatributoop, $key);
+                                $contagematributoop = $contagematributoop + 1;
+                            }
+                        }
+                       
+                    }
+                }
+            }
             
             $data = [
+                'contagematributoop' => $contagematributoop,
+                'chamadosatributoop' => $chamadosatributoop,
+                'contagemadpop' => $contagemadpop,
+                'chamadosdpop' => $chamadosdpop,
                 'user_id' => $user_id,
                 'atribuicao' => $atribuicao,
                 'nivel' => $nivel,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Atribuicoe;
 use App\Models\Departamento;
 use App\Models\Relacionamento;
+use App\Models\Topico;
 use Illuminate\Http\Request;
 
 class ExcluirController extends Controller
@@ -30,8 +31,20 @@ class ExcluirController extends Controller
 
             return redirect()->route('paineladm');
         }elseif(Relacionamento::where('id', '=', $request->id_departamento)->first()){
-            $relacionamento = Relacionamento::where('id', '=', $request->id_departamento)->first();
-            session()->flash('errorelacionameto', 'Não é possivel excluir, departamento está no relacionamento: ' . $relacionamento->id);
+            session()->flash('errorelacionameto', 'Não é possivel excluir, departamento está Relacionado a um Topico!');
+            return redirect()->route('paineladm');
+        }
+    }
+
+    public function excluirTop(Request $request)
+    {
+        if(!Relacionamento::where('topicos_id', '=', $request->id_topico)->first()){
+            $top = Topico::where('id', '=', $request->id_topico)->first();
+            $top->delete();
+
+            return redirect()->route('paineladm');
+        }elseif(Relacionamento::where('id', '=', $request->id_topico)->first()){
+            session()->flash('errorelacionameto', 'Não é possivel excluir, Topico está Relacionado a um Departamento!');
             return redirect()->route('paineladm');
         }
     }

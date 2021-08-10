@@ -5,6 +5,11 @@
 @section('name','Painel de Administração')
 
 @section('content')
+  @isset($errorelacionameto)
+    <div class="alert alert-danger" role="alert">
+      <li>{{$errorelacionameto}}</li>
+    </div>
+  @endisset
   <div class="row ">
     <div class="w-25 mx-auto col">
       <h5 class="text-center">Departamentos</h6>
@@ -23,7 +28,7 @@
                 <th scope="row" class="border">{{$item->id}}</th>
                 <td >{{$item->departamento}}</td>
                 <td>
-                  <button data-bs-target="#excluirdep{{$item->id}}" class="btn btn-primary" data-bs-toggle="modal">
+                  <button data-bs-target="#excluirdep{{$item->id}}" class="btn btn-danger" data-bs-toggle="modal">
                     <i class="fas fa-minus"></i>
                   </button>
                 </td>
@@ -45,6 +50,7 @@
               <tr class="text-center table-dark sticky-top">
                   <th scope="row">ID</th>
                   <th scope="row">TOPICO</th>
+                  <th></th>
               </tr>
           </thead>
           <tbody>
@@ -52,6 +58,11 @@
               <tr class="text-center">
                 <th scope="row" class="border">{{$item->id}}</th>
                 <td >{{$item->topicos}}</td>
+                <td>
+                  <button data-bs-target="#excluirtop{{$item->id}}" class="btn btn-danger" data-bs-toggle="modal">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </td>
               </tr>
             @endforeach
           </tbody>
@@ -64,11 +75,6 @@
   </div>
   <div class="row mt-3">
     <div class="w-25 mx-auto col">
-      @isset($errorelacionameto)
-        <div class="alert alert-danger" role="alert">
-          <li>{{$errorelacionameto}}</li>
-        </div>
-      @endisset
       <h5 class="text-center">Relacionamentos</h6>
       <div class="overflow-auto border rounded-3 listagem-dp">
         <table class="table table-striped table-hover">
@@ -113,7 +119,7 @@
                       </select>
                     </div> 
                     <div class="col-1">
-                      <button data-bs-target="#excluirreluser{{$item->id}}" class="btn btn-primary" data-bs-toggle="modal">
+                      <button data-bs-target="#excluirreluser{{$item->id}}" class="btn btn-danger" data-bs-toggle="modal">
                         <i class="fas fa-minus"></i>
                       </button>
                     </div>                
@@ -343,6 +349,32 @@
               <div class="mb-3 text-center">
                   <input type="hidden" name="id_departamento" value="{{$item->id}}">
                   <label class="form-label">Realmente quer Excluir o Departamento <b>{{$item->departamento}}</b></label>
+              </div>
+              <div class="mb-3 text-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-danger ms-3">Excluir</button>
+              </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endforeach
+
+  @foreach ($topicos as $item)
+    <div class="modal fade" id="excluirtop{{$item->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Excluir Atribuição</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{route('excluirtop')}}" method="POST">
+              @csrf
+              <div class="mb-3 text-center">
+                  <input type="hidden" name="id_topico" value="{{$item->id}}">
+                  <label class="form-label">Realmente quer Excluir o Topico <b>{{$item->topicos}}</b></label>
               </div>
               <div class="mb-3 text-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
