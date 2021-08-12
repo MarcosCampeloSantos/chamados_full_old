@@ -9,7 +9,7 @@
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Fechados</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Favoritos</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Arquivados</button>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -29,46 +29,58 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($chamado as $item)
-                            @if ($item->status_id == '2')
-                                <tr>
-                                    <th scope="row">{{$item->id}}</th>
-                                    @if ($item->status_id == '2')
-                                        <td><span class="badge bg-danger">Fechado</span></td>
-                                    @endif
-                                    <td>
-                                        <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
-                                            @foreach ($tempo as $item2)
-                                                    @if ($item->id == $item2->chamado_id)
-                                                        <option>Pausa: {{$item2->tempototal}}</option>
-                                                        @if($item2->pausado == '2')
-                                                            <option selected> Tempo Total: {{$item2->finalizado}}</option>
-                                                        @endif     
-                                                    @endif
-                                            @endforeach
-                                        </select> 
-                                    </td>
-                                    <td >{{$item->name}}</td>
-                                    <td>
-                                        {{$item->title}}
-                                        @foreach ($interacoes as $item1)
-                                            @if ($item->id == $item1->chamado_id && $item1->anexo)
-                                                <i class="fas fa-paperclip"></i>
+                        @foreach ($finaladm as $item)
+                            <tr>
+                                <th scope="row">{{$item->id}}</th>
+                                @if ($item->status_id == '2')
+                                    <td><span class="badge bg-danger">Fechado</span></td>
+                                @endif
+                                <td>
+                                    <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                        @foreach ($tempo as $item2)
+                                            @if ($item->id == $item2->chamado_id)
+                                                <option>Pausa: {{$item2->tempototal}}</option>
+                                                @if($item2->pausado == '2')
+                                                    <option selected> Tempo Total: {{$item2->finalizado}}</option>
+                                                @endif     
                                             @endif
                                         @endforeach
-                                    </td>
-                                    <td>
-                                        @foreach ($topicos as $item1)
-                                            @if ($item->topico == $item1->id)
-                                                {{$item1->topicos}}
-                                            @endif
-                                        @endforeach
-                                    </td>
-                                    <td>{{$item->created_at}}</td>
-                                    {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
-                                    <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
-                                </tr>
-                            @endif
+                                    </select> 
+                                </td>
+                                <td >{{$item->name}}</td>
+                                <td>
+                                    {{$item->title}}
+                                    @foreach ($interacoes as $item1)
+                                        @if ($item->id == $item1->chamado_id && $item1->anexo)
+                                            <i class="fas fa-paperclip"></i>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($topicos as $item1)
+                                        @if ($item->topico == $item1->id)
+                                            {{$item1->topicos}}
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td>{{$item->created_at}}</td>
+                                {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
+                                <td>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button>
+                                        </div>
+                                        <div class="col-4">
+                                            <form action="{{route('arquivo')}}" method="POST">
+                                                <input type="hidden" name="id_chamado">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-clone"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -91,46 +103,58 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($chamado as $item)
-                                @if ($item->status_id == '2')
-                                    <tr>
-                                        <th scope="row">{{$item->id}}</th>
-                                        @if ($item->status_id == '2')
-                                            <td><span class="badge bg-danger">Fechado</span></td>
-                                        @endif
-                                        <td>
-                                            <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
-                                                @foreach ($tempo as $item2)
-                                                        @if ($item->id == $item2->chamado_id)
-                                                            <option>Pausa: {{$item2->tempototal}}</option>
-                                                            @if($item2->pausado == '2')
-                                                                <option selected> Tempo Total: {{$item2->finalizado}}</option>
-                                                            @endif     
-                                                        @endif
-                                                @endforeach
-                                            </select> 
-                                        </td>
-                                        <td >{{$item->name}}</td>
-                                        <td>
-                                            {{$item->title}}
-                                            @foreach ($interacoes as $item1)
-                                                @if ($item->id == $item1->chamado_id && $item1->anexo)
-                                                    <i class="fas fa-paperclip"></i>
+                            @foreach ($finaladm as $item)
+                                <tr>
+                                    <th scope="row">{{$item->id}}</th>
+                                    @if ($item->status_id == '2')
+                                        <td><span class="badge bg-danger">Fechado</span></td>
+                                    @endif
+                                    <td>
+                                        <select class="form-select chat_select" name="status_chamado" aria-label="Default select example">
+                                            @foreach ($tempo as $item2)
+                                                @if ($item->id == $item2->chamado_id)
+                                                    <option>Pausa: {{$item2->tempototal}}</option>
+                                                    @if($item2->pausado == '2')
+                                                        <option selected> Tempo Total: {{$item2->finalizado}}</option>
+                                                    @endif     
                                                 @endif
                                             @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach ($topicos as $item1)
-                                                @if ($item->topico == $item1->id)
-                                                    {{$item1->topicos}}
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td>{{$item->created_at}}</td>
-                                        {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
-                                        <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button></td>
-                                    </tr>
-                                @endif
+                                        </select> 
+                                    </td>
+                                    <td >{{$item->name}}</td>
+                                    <td>
+                                        {{$item->title}}
+                                        @foreach ($interacoes as $item1)
+                                            @if ($item->id == $item1->chamado_id && $item1->anexo)
+                                                <i class="fas fa-paperclip"></i>
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach ($topicos as $item1)
+                                            @if ($item->topico == $item1->id)
+                                                {{$item1->topicos}}
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{$item->created_at}}</td>
+                                    {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button>
+                                            </div>
+                                            <div class="col-4">
+                                                <form action="{{route('arquivo')}}" method="POST">
+                                                    <input type="hidden" name="id_chamado">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fas fa-clone"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

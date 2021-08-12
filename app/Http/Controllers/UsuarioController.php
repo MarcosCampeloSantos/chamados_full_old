@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Chamado;
 use App\Models\Tempo;
 use App\Models\Topico;
+use App\Models\Favorito;
 use App\Models\Interacoe;
 use App\Models\Relacionamento;
 use App\Models\Departamento;
@@ -67,6 +68,12 @@ class UsuarioController extends Controller{
 
         $topicos->save();
         return redirect()->route('paineladm');
+        
+    }
+
+    public function arquivo(Request $request)
+    {
+        $favoritos = new Favorito;
         
     }
 
@@ -557,7 +564,19 @@ class UsuarioController extends Controller{
             $topicos = Topico::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
+
+            $contfinaladm = 0;
+            $finaladm = array();
+            foreach ($chamado as $key) {
+                if($key->status_id == '2'){
+                    array_push($finaladm, $key);
+                    $contfinaladm = $contfinaladm + 1;
+                }
+            }
+
             $data = [
+                'finaladm' => $finaladm,
+                'contfinaladm' => $contfinaladm,
                 'topicos' => $topicos,
                 'tempo' => $tempo,
                 'chatid' => $chatid,
