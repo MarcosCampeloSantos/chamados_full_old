@@ -6,10 +6,21 @@
     
 @section('content')
     {{---------------------TABELA COM TODOS OS CHAMADOS ABERTOS DE DETERMINADO USUARIO------------------------}}
+    @isset($errofinaladm)
+        <div class="alert alert-danger" role="alert">
+        <li>{{$errofinaladm}}</li>
+        </div>
+    @endisset
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Fechados</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Arquivados</button>
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                Fechados
+                <span class="badge rounded-pill bg-secondary">{{$contfinaladm}}</span>
+            </button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                Arquivados
+                <span class="badge rounded-pill bg-secondary">{{$contfinaladmarc}}</span>
+            </button>
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
@@ -67,14 +78,15 @@
                                 {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
                                 <td>
                                     <div class="row">
-                                        <div class="col-8">
-                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button>
+                                        <div class="col">
+                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}"><i class="fas fa-edit"></i></button>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col">
                                             <form action="{{route('arquivo')}}" method="POST">
-                                                <input type="hidden" name="id_chamado">
+                                                @csrf
+                                                <input type="hidden" name="id_chamado" value="{{$item->id}}">
                                                 <button type="submit" class="btn btn-primary">
-                                                    <i class="fas fa-clone"></i>
+                                                    <i class="fas fa-archive"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -103,7 +115,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($finaladm as $item)
+                            @foreach ($finaladmarc as $item)
                                 <tr>
                                     <th scope="row">{{$item->id}}</th>
                                     @if ($item->status_id == '2')
@@ -141,17 +153,19 @@
                                     {{---------------------BOTÃO PARA CHAMAR O MODAL------------------------}}
                                     <td>
                                         <div class="row">
-                                            <div class="col-8">
-                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">Visualizar Chamado</button>
+                                            <div class="col">
+                                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}"><i class="fas fa-edit"></i></button>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col">
                                                 <form action="{{route('arquivo')}}" method="POST">
-                                                    <input type="hidden" name="id_chamado">
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <i class="fas fa-clone"></i>
+                                                    @csrf
+                                                    <input type="hidden" name="id_arquivo" value="{{$item->id}}">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-folder-minus"></i>
                                                     </button>
                                                 </form>
                                             </div>
+                                        </div>
                                         </div>
                                     </td>
                                 </tr>

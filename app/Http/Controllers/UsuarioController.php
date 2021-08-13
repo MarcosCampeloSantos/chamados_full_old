@@ -73,8 +73,17 @@ class UsuarioController extends Controller{
 
     public function arquivo(Request $request)
     {
-        $favoritos = new Favorito;
-        
+
+        if(!Favorito::where('user_id', '=', session('id'))->where('chamado_id', '=', $request->id_chamado)->first()){
+            $favoritos = new Favorito;
+            $favoritos->chamado_id = $request->id_chamado;
+            $favoritos->user_id = session('id');
+
+            $favoritos->save();
+        }else{
+            session()->flash('errofinaladm', 'Chamado já Foi Arquivado');
+        }
+        return redirect()->route('finalizadosadm');
     }
 
     /* Função para Criando Relacionamentos */
@@ -92,12 +101,10 @@ class UsuarioController extends Controller{
             $atribuicao->id_user = $user->id;
             $atribuicao->id_relacionamento = $relacionamentos->id;
             $atribuicao->save();
-
-            return redirect()->route('paineladm');
         }else{
             session()->flash('errorelacionameto', 'Relacionamento já Existe');
-            return redirect()->route('paineladm');
         }
+        return redirect()->route('paineladm');
 
         
     }
@@ -559,6 +566,8 @@ class UsuarioController extends Controller{
             $erro = session('erroChat');
             $chatid = session('id_Chat');
             $id = session('id');
+            $errofinaladm = session('errofinaladm');
+            $favoritos = Favorito::all();
             $tempo = Tempo::all();
             $chamado = Chamado::all();
             $topicos = Topico::all();
@@ -574,7 +583,21 @@ class UsuarioController extends Controller{
                 }
             }
 
+            $contfinaladmarc = 0;
+            $finaladmarc = array();
+            foreach ($chamado as $key) {
+                foreach ($favoritos as $key2) {
+                    if($key->id == $key2->chamado_id && $key2->user_id == $id && $key->status_id == '2'){
+                        array_push($finaladmarc, $key);
+                        $contfinaladmarc = $contfinaladmarc + 1;
+                    }
+                }
+            }
+
             $data = [
+                'errofinaladm' => $errofinaladm,
+                'contfinaladmarc' => $contfinaladmarc,
+                'finaladmarc' => $finaladmarc,
                 'finaladm' => $finaladm,
                 'contfinaladm' => $contfinaladm,
                 'topicos' => $topicos,
