@@ -11,16 +11,22 @@ a:hover{
     color: rgb(101, 101, 189);
 }
 
+/*::-webkit-scrollbar {
+    width: 0px;
+}*/
+
+.scroll{
+    display: flex;
+    overflow: auto;
+    flex-direction: column-reverse;
+}
+
 .chat_color{
     background-color: rgb(255, 255, 255);
 }
 
 .chat_content{
     height: 25rem;
-}
-
-.chat_label{
-    width: 29rem;
 }
 
 .chat_content_interno{
@@ -34,7 +40,7 @@ a:hover{
 .chat{
     background-color: rgb(240, 255, 255);
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.288) inset;
-    border-radius: 0.5rem;
+    
 }
 
 .cor{
@@ -122,6 +128,10 @@ a:hover{
 
 .camada{
     width: 90rem;
+}
+
+.ck-editor__editable_inline{
+    min-height: 10rem;
 }
 
 

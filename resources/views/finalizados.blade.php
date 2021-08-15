@@ -79,7 +79,7 @@
         </table>
 
         {{---------------------MODAL COM DADOS DO CHAMADO------------------------}}
-        @foreach ($chamado as $item)
+        @foreach ($chamado->reverse() as $item)
             <div class="modal fade" id="exampleModal{{$item->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -96,8 +96,8 @@
                                     <li>{{$erroChat}}</li>
                                 </div>
                             @endisset
-                            <div class="chat chat_content p-3 overflow-auto">
-                                @foreach ($interacoes as $item1)
+                            <div class="scroll chat chat_content rounded-top p-3 overflow-auto border border-1">
+                                @foreach ($interacoes_>reverse() as $item1)
                                     @if ($item1->inicio != '1')
                                         @if ($item1->chamado_id == $item->id)
                                             <div class="mb-3 shadow p-3 chat_color rounded">
@@ -106,7 +106,7 @@
                                                         <p><b>{{$item3->name}}</b></p>
                                                     @endif
                                                 @endforeach
-                                                <p class="text-break">{{$item1->chat}}</p>
+                                                <p>{!!$item1->chat!!}</p>
                                                 <div class="row">
                                                     @if ($item1->anexo)
                                                         <div class="col">
@@ -139,9 +139,13 @@
                             <div>
                                 <form action="{{route('envchat')}}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <textarea type="text" class="form-label chat_label mt-2 text-break p-2" rows="3" name="chat" id="cria_email" placeholder="Digite o Aqui..."></textarea>
-                                    <input class="form-control mb-3 mx-auto" name="anexo" type="file" id="formFile">
-                                    <div class="row">
+                                    @php
+                                        $cont = array();
+                                        array_push($cont, $item->id);
+                                    @endphp
+                                    <textarea type="text" id="txtArtigo" class="chat{{$item->id}} form-label chat_label mt-2 text-break p-2" rows="3" name="chat" id="cria_email" placeholder="Digite o Aqui..."></textarea>
+                                    <input class="form-control mt-2 w-50" name="anexo" type="file" id="formFile">
+                                    <div class="row mt-3">
                                         <input type="hidden" name="id_Chat" id="id_Chat" value="#exampleModal{{$item->id}}">
                                         <input type="hidden" name="url_ver" id="url_ver" value="{{Request::segment(1)}}">
                                         <div class="col">
@@ -156,6 +160,50 @@
                 </div>
             </div>
         </div>
+        
+        <script>
+            var teste = <?php if(isset($cont)){echo json_encode($cont);} ?>;
+            function teste1(item){
+                ClassicEditor
+                .create( document.querySelector( '.chat'+item ), {
+                    toolbar: {
+					items: [
+						'heading',
+						'fontFamily',
+						'fontSize',
+						'|',
+						'bold',
+						'italic',
+						'bulletedList',
+						'numberedList',
+						'fontBackgroundColor',
+						'fontColor',
+						'removeFormat',
+						'|',
+						'outdent',
+						'indent',
+						'alignment',
+						'|',
+						'undo',
+						'redo'
+					]
+				},
+				language: 'pt-br',
+					licenseKey: '',			
+				} )
+				.then( editor => {
+					window.editor = editor;
+				} )
+				.catch( error => {
+					console.error( 'Oops, something went wrong!' );
+					console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+					console.warn( 'Build id: oevj7xtxj0l9-uxkzi3ishqrq' );
+					console.error( error );
+                } );
+            }
+            teste.forEach(teste1);
+		</script>
+
         @isset($erroChat)
             @isset($chatid)
                 <input type="hidden" value="{{$chatid}}" id="finalmente">

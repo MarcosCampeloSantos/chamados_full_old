@@ -48,3 +48,4 @@ Route::post('/excluirdep','excluircontroller@excluirDep')->name('excluirdep'); #
 Route::post('/excluirtop','excluircontroller@excluirTop')->name('excluirtop'); #Deletar Topico
 Route::post('/excluirel','excluircontroller@excluiRel')->name('excluirel'); #Deletar Topico
 Route::post('/arquivo','usuariocontroller@arquivo')->name('arquivo'); #Arquivar Chamado
+Route::post('/excluirarquivo','excluircontroller@excluirArquivo')->name('excluirarquivo'); #Excluit Chamado do Arquivo

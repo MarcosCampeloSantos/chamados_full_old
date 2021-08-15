@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Atribuicoe;
 use App\Models\Departamento;
+use App\Models\Favorito;
 use App\Models\Relacionamento;
 use App\Models\Topico;
 use Illuminate\Http\Request;
@@ -55,6 +56,14 @@ class ExcluirController extends Controller
         $dep->delete();
 
         return redirect()->route('paineladm');
+    }
+
+    public function excluirArquivo(Request $request)
+    {
+        $excluirArquivo = Favorito::where('user_id', '=', session('id'))->where('chamado_id', '=', $request->id_excluirarquivo)->first();
+        $excluirArquivo->delete();
+        
+        return redirect()->route('finalizadosadm');
     }
         
 }
