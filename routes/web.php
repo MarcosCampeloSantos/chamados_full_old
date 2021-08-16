@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ExcluirController;
+use App\Mail\SendMails;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*

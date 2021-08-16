@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChatRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UsuarioRequest;
+use App\Mail\SendMails;
 use App\Models\Atribuicoe;
 use App\Models\User;
 use App\Models\Chamado;
@@ -17,6 +18,7 @@ use App\Models\Departamento;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UsuarioController extends Controller{
 
@@ -199,6 +201,7 @@ class UsuarioController extends Controller{
     public function envChat(Request $request)
     {
         $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
+        $user = User::where('id', '=', $chamado->user_id)->first();
         $chat = new Interacoe;
         $tempo = new Tempo;
         $databanco = new DateTime(date('Y/m/d H:i:s'));
@@ -227,6 +230,7 @@ class UsuarioController extends Controller{
 
             $chat->save();
             $chamado->save();
+            Mail::send(new SendMails($user, $request->chat));
 
             if($chamado->status_id == '4'){
                 $tempopause->termino = $databanco->format('Y/m/d H:i:s');
