@@ -73,6 +73,7 @@ class UsuarioController extends Controller{
         
     }
 
+    /* Função para Arquivar Chamados */
     public function arquivo(Request $request)
     {
 
@@ -89,7 +90,6 @@ class UsuarioController extends Controller{
     }
 
     /* Função para Criando Relacionamentos */
-
     public function criarRel(Request $request)
     {  
         $atribuicao = new Atribuicoe;
@@ -111,6 +111,7 @@ class UsuarioController extends Controller{
         
     }
 
+    /* Função para Editar Relacionamento */
     public function editarRel(Request $request)
     {
         $idrel = $request->id_relacionamento;
@@ -135,9 +136,9 @@ class UsuarioController extends Controller{
         }
     }
 
+    /* Função para Atribuir Ralacionamento a Operador/Adm */
     public function adicionarAtributo(Request $request)
     {
-
         if (!Atribuicoe::where('id_relacionamento', '=', $request->id_relacionamento)->where('id_user', '=', $request->rel_user_edit)->first()) {
             $atributo = new Atribuicoe();
             $atributo->id_user = $request->rel_user_edit;
@@ -207,6 +208,8 @@ class UsuarioController extends Controller{
         $databanco = new DateTime(date('Y/m/d H:i:s'));
         $tempopause = Tempo::where('chamado_id', '=', $request->id_chamado)->where('pausado', '=', '0')->first();
         $temposoma = 0;
+
+        /* Verificação se Exite mensagem e Anexo Caso não Retorna Erro*/
         if (!empty($request->chat)) {
             if($this->checarAdm()){
                 $chamado->status_id = $request->status_chamado;
@@ -223,15 +226,17 @@ class UsuarioController extends Controller{
                 $chat->nameanexo = $requestarquivo->getClientOriginalName();
             }
 
-           
+            /* Envio de Mensagem no Chat */
             $chat->user_id = session('id');
             $chat->chamado_id = $request->id_chamado;
             $chat->chat = $request->chat;
 
             $chat->save();
             $chamado->save();
-            Mail::send(new SendMails($user, $request->chat));
+            
+            Mail::send(new SendMails($user, $request->chat)); /* Notificação no E-mail */
 
+            /* Logica para contagem do Tempo de Atendimento do Chamado */
             if($chamado->status_id == '4'){
                 $tempopause->termino = $databanco->format('Y/m/d H:i:s');
                 $tempopause->pausado = '1';
@@ -299,6 +304,7 @@ class UsuarioController extends Controller{
     {
         return session()->has('usuario');
     }
+
     /* Função para Checar se é um Adm*/
     public function checarAdm()
     {
@@ -307,6 +313,7 @@ class UsuarioController extends Controller{
         }
     }
 
+    /* Função para Checar se é um Operador*/
     public function checarOp()
     {
         if(session('nivel') == '4'){
@@ -473,163 +480,7 @@ class UsuarioController extends Controller{
         
     }
 
-    /* Função para Redirecionameto da Tela de Criação e Edição de Usuarios*/
-    public function usuarios()
-    {
-        if($this->checarSessao() && $this->checarAdm()){
-            $departamento = Departamento::all();
-            $users = User::all();
-            $data = [
-                'users' => $users,
-                'departamento' => $departamento
-            ];
-            return view('admin.usuarios', $data);
-        }elseif($this->checarSessao() && !$this->checarAdm()){
-            return redirect()->route('homeUser');
-        }else{
-            return redirect()->route('loginUser');
-        }
-       
-    }
-
-    /* Função para Redirecionameto da Tela de Criação de Chamados */
-    public function chamado()
-    {
-        if($this->checarSessao()){
-            $topicos = Topico::all();
-            $data = [
-                'topicos' => $topicos
-            ];
-            return view('chamados', $data);
-        }else{
-            return redirect()->route('loginUser');
-        }
-    }
-
-    /* Função para Redirecionameto da Tela de Acompanhamento de Chamados */
-    public function acompanharChamados()
-    {
-        if($this->checarSessao()){
-            $erro = session('erroChat');
-            $id = session('id');
-            $chatid = session('id_Chat');
-            $nivel = session('nivel');
-            $departamento = session('departamento');
-            $chamado = Chamado::all();
-            $usuarios = User::all();
-            $chat = Interacoe::all();
-            $data = [
-                'departamento' => $departamento,
-                'nivel' => $nivel,
-                'chatid' => $chatid,
-                'erroChat' => $erro,
-                'interacoes' => $chat,
-                'chamado' => $chamado,
-                'id' => $id,
-                'usuarios'=> $usuarios
-            ];
-            return view('acompanhar', $data);
-        }else{
-            return redirect()->route('loginUser');
-        }
-        
-    }
-
-    public function finalizados()
-    {
-        if($this->checarSessao()){
-            $erro = session('erroChat');
-            $nivel = session('nivel');
-            $id = session('id');
-            $chatid = session('id_Chat');
-            $departamento = session('departamento');
-            $topicos = Topico::all();
-            $chamado = Chamado::all();
-            $usuarios = User::all();
-            $chat = Interacoe::all();
-            $data = [
-                'topicos' => $topicos,
-                'nivel' => $nivel,
-                'departamento' => $departamento,
-                'chatid' => $chatid,
-                'erroChat' => $erro,
-                'interacoes' => $chat,
-                'chamado' => $chamado,
-                'id' => $id,
-                'usuarios'=> $usuarios
-            ];
-            return view('finalizados', $data);
-        }else{
-            return redirect()->route('loginUser');
-        }
-    }
-
-    public function finalizadosAdm()
-    {
-        if($this->checarSessao()){
-            $erro = session('erroChat');
-            $chatid = session('id_Chat');
-            $id = session('id');
-            $errofinaladm = session('errofinaladm');
-            $favoritos = Favorito::all();
-            $tempo = Tempo::all();
-            $chamado = Chamado::all();
-            $topicos = Topico::all();
-            $usuarios = User::all();
-            $chat = Interacoe::all();
-
-            $contfinaladm = 0;
-            $finaladm = array();
-            foreach ($chamado as $key) {
-                if($key->status_id == '2'){
-                    array_push($finaladm, $key);
-                    $contfinaladm = $contfinaladm + 1;
-                }
-            }
-
-            $contfinaladmarc = 0;
-            $finaladmarc = array();
-            foreach ($chamado as $key) {
-                foreach ($favoritos as $key2) {
-                    if($key->id == $key2->chamado_id && $key2->user_id == $id && $key->status_id == '2'){
-                        array_push($finaladmarc, $key);
-                        $contfinaladmarc = $contfinaladmarc + 1;
-                    }
-                }
-            }
-
-            $data = [
-                'errofinaladm' => $errofinaladm,
-                'contfinaladmarc' => $contfinaladmarc,
-                'finaladmarc' => $finaladmarc,
-                'finaladm' => $finaladm,
-                'contfinaladm' => $contfinaladm,
-                'topicos' => $topicos,
-                'tempo' => $tempo,
-                'chatid' => $chatid,
-                'erroChat' => $erro,
-                'interacoes' => $chat,
-                'chamado' => $chamado,
-                'id' => $id,
-                'usuarios'=> $usuarios
-            ];
-            return view('admin.finalizadosadm', $data);
-        }else{
-            return redirect()->route('loginUser');
-        }
-    }
-
-    public function homeSup()
-    {
-        $name = session('name');
-
-        $data = [
-            'name' => $name,
-        ];
-
-        return view('supervisor.indexsup', $data);
-    }
-
+    /* Função para Redirecionameto da Tela Home do Operador */
     public function homeOp()
     {
         if($this->checarSessao() && $this->checarAdm() || $this->checarSessao() && $this->checarOp()){
@@ -701,6 +552,166 @@ class UsuarioController extends Controller{
         }else{
             return redirect()->route('loginUser');
         }
+    }
+
+    /* Função para Redirecionameto da Tela de Criação e Edição de Usuarios*/
+    public function usuarios()
+    {
+        if($this->checarSessao() && $this->checarAdm()){
+            $departamento = Departamento::all();
+            $users = User::all();
+            $data = [
+                'users' => $users,
+                'departamento' => $departamento
+            ];
+            return view('admin.usuarios', $data);
+        }elseif($this->checarSessao() && !$this->checarAdm()){
+            return redirect()->route('homeUser');
+        }else{
+            return redirect()->route('loginUser');
+        }
+       
+    }
+
+    /* Função para Redirecionameto da Tela de Criação de Chamados */
+    public function chamado()
+    {
+        if($this->checarSessao()){
+            $topicos = Topico::all();
+            $data = [
+                'topicos' => $topicos
+            ];
+            return view('chamados', $data);
+        }else{
+            return redirect()->route('loginUser');
+        }
+    }
+
+    /* Função para Redirecionameto da Tela de Acompanhamento de Chamados */
+    public function acompanharChamados()
+    {
+        if($this->checarSessao()){
+            $erro = session('erroChat');
+            $id = session('id');
+            $chatid = session('id_Chat');
+            $nivel = session('nivel');
+            $departamento = session('departamento');
+            $chamado = Chamado::all();
+            $usuarios = User::all();
+            $chat = Interacoe::all();
+            $data = [
+                'departamento' => $departamento,
+                'nivel' => $nivel,
+                'chatid' => $chatid,
+                'erroChat' => $erro,
+                'interacoes' => $chat,
+                'chamado' => $chamado,
+                'id' => $id,
+                'usuarios'=> $usuarios
+            ];
+            return view('acompanhar', $data);
+        }else{
+            return redirect()->route('loginUser');
+        }
+        
+    }
+
+    /* Função para Redirecionameto da Tela de Chamados Finalizados do Usuario */
+    public function finalizados()
+    {
+        if($this->checarSessao()){
+            $erro = session('erroChat');
+            $nivel = session('nivel');
+            $id = session('id');
+            $chatid = session('id_Chat');
+            $departamento = session('departamento');
+            $topicos = Topico::all();
+            $chamado = Chamado::all();
+            $usuarios = User::all();
+            $chat = Interacoe::all();
+            $data = [
+                'topicos' => $topicos,
+                'nivel' => $nivel,
+                'departamento' => $departamento,
+                'chatid' => $chatid,
+                'erroChat' => $erro,
+                'interacoes' => $chat,
+                'chamado' => $chamado,
+                'id' => $id,
+                'usuarios'=> $usuarios
+            ];
+            return view('finalizados', $data);
+        }else{
+            return redirect()->route('loginUser');
+        }
+    }
+
+    /* Função para Redirecionameto da Tela de Chamados Finalizados do Operador/Adm */
+    public function finalizadosAdm()
+    {
+        if($this->checarSessao()){
+            $erro = session('erroChat');
+            $chatid = session('id_Chat');
+            $id = session('id');
+            $errofinaladm = session('errofinaladm');
+            $favoritos = Favorito::all();
+            $tempo = Tempo::all();
+            $chamado = Chamado::all();
+            $topicos = Topico::all();
+            $usuarios = User::all();
+            $chat = Interacoe::all();
+
+            $contfinaladm = 0;
+            $finaladm = array();
+            foreach ($chamado as $key) {
+                if($key->status_id == '2'){
+                    array_push($finaladm, $key);
+                    $contfinaladm = $contfinaladm + 1;
+                }
+            }
+
+            $contfinaladmarc = 0;
+            $finaladmarc = array();
+            foreach ($chamado as $key) {
+                foreach ($favoritos as $key2) {
+                    if($key->id == $key2->chamado_id && $key2->user_id == $id && $key->status_id == '2'){
+                        array_push($finaladmarc, $key);
+                        $contfinaladmarc = $contfinaladmarc + 1;
+                    }
+                }
+            }
+
+            $data = [
+                'errofinaladm' => $errofinaladm,
+                'contfinaladmarc' => $contfinaladmarc,
+                'finaladmarc' => $finaladmarc,
+                'finaladm' => $finaladm,
+                'contfinaladm' => $contfinaladm,
+                'topicos' => $topicos,
+                'tempo' => $tempo,
+                'chatid' => $chatid,
+                'erroChat' => $erro,
+                'interacoes' => $chat,
+                'chamado' => $chamado,
+                'id' => $id,
+                'usuarios'=> $usuarios
+            ];
+            return view('admin.finalizadosadm', $data);
+        }else{
+            return redirect()->route('loginUser');
+        }
+    }
+
+    /* Função para Redirecionameto da Tela do Supervisor de Departamento*/
+    public function homeSup()
+    {
+        $name = session('name');
+
+        $data = [
+            'name' => $name,
+        ];
+
+        return view('supervisor.indexsup', $data);
     }
 }
 

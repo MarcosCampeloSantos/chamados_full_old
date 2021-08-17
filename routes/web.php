@@ -31,7 +31,6 @@ Route::get('/finalizadosadm','usuariocontroller@finalizadosAdm')->name('finaliza
 Route::get('/homeSup','usuariocontroller@homeSup')->name('homeSup'); #Tela Home do Supervisor
 Route::get('/homeOp','usuariocontroller@homeOp')->name('homeOp'); #Tela Home do Operador
 
-
 Route::get("/anexo/{file}", function ($file="") {
     return response()->download(public_path("anexos/".$file));
     });
@@ -46,6 +45,7 @@ Route::post('/envchat','usuariocontroller@envChat')->name('envchat'); #Enviar me
 Route::post('/criar_rel','usuariocontroller@criarRel')->name('criar_rel'); #Criar Relacionamentro
 Route::post('/editar_rel','usuariocontroller@editarRel')->name('editar_rel'); #Editar Relacionamento
 Route::post('/adicionar_atributo','usuariocontroller@adicionarAtributo')->name('adicionar_atributo'); #Editar Atributo
+
 Route::post('/delete_atributo','excluircontroller@deleteAtributo')->name('delete_atributo'); #Deletar Atributo
 Route::post('/excluirdep','excluircontroller@excluirDep')->name('excluirdep'); #Deletar Departamento
 Route::post('/excluirtop','excluircontroller@excluirTop')->name('excluirtop'); #Deletar Topico
