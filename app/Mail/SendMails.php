@@ -14,16 +14,19 @@ class SendMails extends Mailable
 
     private $usuario;
     private $msg;
+    private $chamado;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, String $mensagem)
+    public function __construct(User $user, String $mensagem, $chamado)
     {
         $this->usuario = $user;
         $this->msg = $mensagem;
+        $this->chamado = $chamado;
+
     }
 
     /**
@@ -37,7 +40,8 @@ class SendMails extends Mailable
         $this->to(address: $this->usuario->email, name: $this->usuario->name);
         $data=[
             'usuario'=>$this->usuario,
-            'mensagem'=>$this->msg
+            'mensagem'=>$this->msg,
+            'chamado' => $this->chamado,
         ];
         return $this->view('mail.stylemail', $data);
     }

@@ -234,7 +234,7 @@ class UsuarioController extends Controller{
             $chat->save();
             $chamado->save();
             
-            Mail::send(new SendMails($user, $request->chat)); /* Notificação no E-mail */
+            Mail::send(new SendMails($user, $request->chat, $request->id_chamado)); /* Notificação no E-mail */
 
             /* Logica para contagem do Tempo de Atendimento do Chamado */
             if($chamado->status_id == '4'){
