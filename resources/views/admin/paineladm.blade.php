@@ -154,7 +154,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Criar Deparmento</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Criar Departamento</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -162,7 +162,9 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label">Departamento</label>
-                <input type="text" class="form-control" rows="3" name="cria_dep" id="cria_email" placeholder="Digite o Topico">
+                <input type="text" class="form-control mb-3" rows="3" name="cria_dep" placeholder="Digite o Departamento">
+                <label class="form-label">E-mail de Notificação</label>
+                <input type="email" class="form-control" rows="3" name="cria_dep_email" placeholder="Digite o Email">
             </div>
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Criar</button>

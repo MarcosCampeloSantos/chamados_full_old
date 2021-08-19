@@ -8,24 +8,27 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMails extends Mailable
+class SendMailsAdm extends Mailable
 {
     use Queueable, SerializesModels;
 
     private $usuario;
     private $msg;
     private $chamado;
+    private $email;
+
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, String $mensagem, $chamado)
+    public function __construct(User $user, String $mensagem, $chamado, $email)
     {
         $this->usuario = $user;
         $this->msg = $mensagem;
         $this->chamado = $chamado;
+        $this->email = $email;
 
     }
 
@@ -37,7 +40,7 @@ class SendMails extends Mailable
     public function build()
     {
         $this->subject('Teste Feito Com sucesso!!');
-        $this->to($this->usuario->email, $this->usuario->name);
+        $this->to($this->email, $this->usuario->name);
         $data=[
             'usuario'=>$this->usuario,
             'mensagem'=>$this->msg,

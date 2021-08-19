@@ -6,6 +6,9 @@ use App\Http\Requests\ChatRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UsuarioRequest;
 use App\Mail\SendMails;
+use App\Mail\SendMailsAdm;
+use App\Mail\SendCriacaoMailAdm;
+use App\Mail\SendCriacaoMail;
 use App\Models\Atribuicoe;
 use App\Models\User;
 use App\Models\Chamado;
@@ -157,9 +160,14 @@ class UsuarioController extends Controller{
     public function criarDep(Request $request)
     {
         $departamento = new Departamento;
-        $departamento->departamento = $request->cria_dep;
+        if(!empty($request->cria_dep) || !empty($request->cria_dep_email)){
+            $departamento->departamento = $request->cria_dep;
+            $departamento->menssageremail = $request->cria_dep_email;
 
-        $departamento->save();
+            $departamento->save();
+        }else{
+            session()->flash('errorelacionameto', 'Por favor Preencha todos os Campos!');
+        }
         return redirect()->route('paineladm');
     }
 
@@ -168,6 +176,7 @@ class UsuarioController extends Controller{
     {
         $chamado = new Chamado;
         $chat = new Interacoe;
+        $user = User::where('id', '=', session('id'))->first();
 
         $chamado->departamento = session('departamento');
         $chamado->status_id = '1';
@@ -193,9 +202,16 @@ class UsuarioController extends Controller{
         $chat->chamado_id = $chamado->id;
 
         $chat->save();
-        
 
-        return redirect()->route('chamado');
+
+        /* Notificação de Criação de Chamado */
+        $enviochamado = Chamado::where('id', '=', $chamado->id)->first();
+        $departamento = Departamento::where('id', '=', $enviochamado->departamento)->first();
+
+        Mail::send(new SendCriacaoMailAdm($user, $request->conteudo, $chamado->id, $departamento->menssageremail, $chamado->title)); /* Notificação no E-mail Operados/Adm */
+        Mail::send(new SendCriacaoMail($user, $request->conteudo, $chamado->id, $chamado->title)); /* Notificação no E-mail Usuario */
+
+        return redirect()->route('homeAdm');
     }
 
     /* Função para Envio de mensagens nos Chamados */
@@ -203,6 +219,7 @@ class UsuarioController extends Controller{
     {
         $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
         $user = User::where('id', '=', $chamado->user_id)->first();
+        $departamento = Departamento::where('id', '=', $chamado->departamento)->first();
         $chat = new Interacoe;
         $tempo = new Tempo;
         $databanco = new DateTime(date('Y/m/d H:i:s'));
@@ -234,7 +251,8 @@ class UsuarioController extends Controller{
             $chat->save();
             $chamado->save();
             
-            Mail::send(new SendMails($user, $request->chat, $request->id_chamado)); /* Notificação no E-mail */
+            Mail::send(new SendMailsAdm($user, $request->chat, $chamado->id, $departamento->menssageremail)); /* Notificação no E-mail Operados/Adm */
+            Mail::send(new SendMails($user, $request->chat, $chamado->id)); /* Notificação no E-mail Usuario */
 
             /* Logica para contagem do Tempo de Atendimento do Chamado */
             if($chamado->status_id == '4'){

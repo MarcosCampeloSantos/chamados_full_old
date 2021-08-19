@@ -40,10 +40,12 @@
                 Todos os Chamados
                 <span class="badge rounded-pill bg-secondary">{{$contagemadpop}}</span>
             </button>
+            @if ($contagematributoop != 0)
             <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
                 Chamados Atribuidos
                 <span class="badge rounded-pill bg-secondary">{{$contagematributoop}}</span>
             </button>
+            @endif
             <button onclick="refresh()" class="btn m-2 ms-3"><i class="fas fa-sync-alt"></i></button>
         </div>
     </nav>
