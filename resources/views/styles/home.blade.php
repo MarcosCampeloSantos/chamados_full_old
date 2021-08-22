@@ -6,7 +6,6 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="{{url(mix('js/app.js'))}}"></script>
         <script src="{{url(mix('js/app2.js'))}}"></script>
-        <script src="ckeditor/ckeditor.js"></script>
         <link rel="stylesheet" href="{{url(mix('css/app.css'))}}">
         <link rel="stylesheet" href="{{url(mix('css/app2.css'))}}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">

@@ -163,50 +163,6 @@
                 </div>
             </div>
         </div>
-        
-        <script>
-            var teste = <?php if(isset($cont)){echo json_encode($cont);} ?>;
-            function teste1(item){
-                ClassicEditor
-                .create( document.querySelector( '.chat'+item ), {
-                    toolbar: {
-					items: [
-						'heading',
-						'fontFamily',
-						'fontSize',
-						'|',
-						'bold',
-						'italic',
-						'bulletedList',
-						'numberedList',
-						'fontBackgroundColor',
-						'fontColor',
-						'removeFormat',
-						'|',
-						'outdent',
-						'indent',
-						'alignment',
-						'|',
-						'undo',
-						'redo'
-					]
-				},
-				language: 'pt-br',
-					licenseKey: '',			
-				} )
-				.then( editor => {
-					window.editor = editor;
-				} )
-				.catch( error => {
-					console.error( 'Oops, something went wrong!' );
-					console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-					console.warn( 'Build id: oevj7xtxj0l9-uxkzi3ishqrq' );
-					console.error( error );
-                } );
-            }
-            teste.forEach(teste1);
-		</script>
-
         @isset($erroChat)
             @isset($chatid)
                 <input type="hidden" value="{{$chatid}}" id="finalmente">
@@ -220,6 +176,49 @@
             @endisset
         @endisset
     @endforeach
+    
+    <script>
+        var teste = <?php if(isset($cont)){echo json_encode($cont);} ?>;
+        function teste1(item){
+            ClassicEditor
+            .create( document.querySelector( '.chat'+item ), {
+                toolbar: {
+                items: [
+                    'heading',
+                    'fontFamily',
+                    'fontSize',
+                    '|',
+                    'bold',
+                    'italic',
+                    'bulletedList',
+                    'numberedList',
+                    'fontBackgroundColor',
+                    'fontColor',
+                    'removeFormat',
+                    '|',
+                    'outdent',
+                    'indent',
+                    'alignment',
+                    '|',
+                    'undo',
+                    'redo'
+                ]
+            },
+            language: 'pt-br',
+                licenseKey: '',			
+            } )
+            .then( editor => {
+                window.editor = editor;
+            } )
+            .catch( error => {
+                console.error( 'Oops, something went wrong!' );
+                console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+                console.warn( 'Build id: oevj7xtxj0l9-uxkzi3ishqrq' );
+                console.error( error );
+            } );
+        }
+        teste.forEach(teste1);
+    </script>
 </div>
    
 @endsection

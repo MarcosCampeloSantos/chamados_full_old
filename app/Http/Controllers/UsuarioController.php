@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChatRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UsuarioRequest;
+use App\Http\Controllers\FiltroController;
 use App\Mail\SendMails;
 use App\Mail\SendMailsAdm;
 use App\Mail\SendCriacaoMailAdm;
@@ -19,6 +20,7 @@ use App\Models\Interacoe;
 use App\Models\Relacionamento;
 use App\Models\Departamento;
 use DateTime;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -219,6 +221,7 @@ class UsuarioController extends Controller{
     {
         $chamado = Chamado::where('id', '=', $request->id_chamado)->first();
         $user = User::where('id', '=', $chamado->user_id)->first();
+        $userOp = User::where('id', '=', session('id'))->first();
         $departamento = Departamento::where('id', '=', $chamado->departamento)->first();
         $chat = new Interacoe;
         $tempo = new Tempo;
@@ -256,65 +259,87 @@ class UsuarioController extends Controller{
 
             /* Logica para contagem do Tempo de Atendimento do Chamado */
             if($chamado->status_id == '4'){
-                $tempopause->termino = $databanco->format('Y/m/d H:i:s');
-                $tempopause->pausado = '1';
-                $tempopause->save();
-    
-                $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
-    
-                $tempopause->tempototal = gmdate("H:i:s", $diferenca);
-                $tempopause->save();
-                session()->put('pause', $tempopause->pausado);
-            }elseif($chamado->status_id == '2'){
-                $tempopause->termino = $databanco->format('Y/m/d H:i:s');
-                $tempopause->save();
-    
-                $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
-    
-                $tempopause->tempototal = gmdate("H:i:s", $diferenca);
-                $tempopause->save();
-    
-                $tempototal = Tempo::all();
-    
-                foreach ($tempototal as $key) {
-                    if($key->chamado_id == $chamado->id){
-                        $temposoma = $temposoma + (strtotime($key->termino) - strtotime($key->inicio));
-                    }
+                if($userOp->id_chamado != NULL){
+                    $tempopause->termino = $databanco->format('Y/m/d H:i:s');
+                    $tempopause->pausado = '1';
+                    $tempopause->save();
+        
+                    $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
+        
+                    $tempopause->tempototal = gmdate("H:i:s", $diferenca);
+                    $tempopause->save();
+
+                    $userOp->id_chamado = NULL;
+                    $userOp->save();
+
+                    session()->put('pause', $tempopause->pausado);
+                }else{
+                    session()->flash('erroChat', 'Você já esta Atendendo o chamado #'.$userOp->id_chamado);
                 }
-                $tempopause->pausado = '2';
-                $tempopause->finalizado = gmdate("H:i:s", $temposoma);
-                $tempopause->save();
+                
+            }elseif($chamado->status_id == '2'){
+                if($userOp->id_chamado != NULL){
+                    $tempopause->termino = $databanco->format('Y/m/d H:i:s');
+                    $tempopause->save();
+        
+                    $diferenca = strtotime($tempopause->termino) - strtotime($tempopause->inicio);
+
+                    $userOp->id_chamado = NULL;
+                    $userOp->save();
+        
+                    $tempopause->tempototal = gmdate("H:i:s", $diferenca);
+                    $tempopause->save();
+        
+                    $tempototal = Tempo::all();
+        
+                    foreach ($tempototal as $key) {
+                        if($key->chamado_id == $chamado->id){
+                            $temposoma = $temposoma + (strtotime($key->termino) - strtotime($key->inicio));
+                        }
+                    }
+                    $tempopause->pausado = '2';
+                    $tempopause->finalizado = gmdate("H:i:s", $temposoma);
+                    $tempopause->save();
+                }else{
+                    session()->flash('erroChat', 'Você já esta Atendendo o chamado #'.$userOp->id_chamado);
+                }
                 
             }
-            
-            return redirect()->route($request->url_ver);
-
         }elseif($chamado->status_id == '1' || $chamado->status_id == '4'){
             if($this->checarAdm()){
                 $chamado->status_id = $request->status_chamado;
             }elseif(!$this->checarAdm()){
                 $chamado->status_id = '1';
             }
-            $chat->user_id = session('id');
-            $chat->chamado_id = $request->id_chamado;
-            $chat->chat = 'iniciou o Atendimento!';
-            $chat->inicio = '1';
-            $chat->save();
-            $chamado->save();
 
-            $tempo->chamado_id = $chamado->id;
-            $tempo->pausado = '0';
-            $tempo->inicio = $databanco->format('Y/m/d H:i:s');
-            $tempo->save();
-            $tempopause = Tempo::where('chamado_id', '=', $request->id_chamado)->where('pausado', '=', '0')->first();
-            session()->put('pause', $tempopause->pausado);
-            return redirect()->route($request->url_ver);
+            if($userOp->id_chamado == NULL){
+                $chat->user_id = session('id');
+                $chat->chamado_id = $chamado->id;
+                $chat->chat = 'iniciou o Atendimento!';
+                $chat->inicio = '1';
+                $chat->save();
+                $chamado->save();
+
+                $userOp->id_chamado = $chamado->id;
+                $userOp->save();
+
+                $tempo->chamado_id = $chamado->id;
+                $tempo->pausado = '0';
+                $tempo->inicio = $databanco->format('Y/m/d H:i:s');
+                $tempo->save();
+                $tempopause = Tempo::where('chamado_id', '=', $request->id_chamado)->where('pausado', '=', '0')->first();
+                session()->put('pause', $tempopause->pausado);
+            }else{
+                session()->flash('erroChat', 'Você já esta Atendendo o chamado #'.$userOp->id_chamado);
+            }
         }
         else{
             session()->flash('id_Chat', $request->id_Chat);
             session()->flash('erroChat', 'Digite uma Mensagem!');
-            return redirect()->route($request->url_ver);
         }
+
+        session()->flash('id_Chat', $request->id_Chat);
+        return redirect()->route($request->url_ver);
     } 
 
     /* Função para Checagem se é um Usuario*/
@@ -415,7 +440,7 @@ class UsuarioController extends Controller{
     }
 
     /* Função para Redirecionameto da Tela Home de Adm */
-    public function homeAdm()
+    public function homeAdm(Request $request)
     {
         if($this->checarSessao() && $this->checarAdm()){
             $user_id = session('id');
@@ -426,10 +451,18 @@ class UsuarioController extends Controller{
             $atribuicao = Atribuicoe::all();
             $topicos = Topico::all();
             $usuarios = User::all();
-            $chamado = Chamado::all();
             $chat = Interacoe::all();
             $tempo = Tempo::all();
             $relacionamentos = Relacionamento::all();
+
+            $chamados = new Chamado;
+            if(empty($request->search)){
+                $limpafiltro = false;
+                $chamado = Chamado::all();
+            }else{
+                $limpafiltro = true;
+                $chamado = $chamados->pesquisa($request->search);
+            }
 
             $contagemalladm = 0;
             $chamadosalladm = array();
@@ -470,6 +503,7 @@ class UsuarioController extends Controller{
             }
             
             $data = [
+                'limpafiltro' => $limpafiltro,
                 'contagemalladm' => $contagemalladm,
                 'chamadosalladm' => $chamadosalladm,
                 'contagematributoadm' => $contagematributoadm,
@@ -499,7 +533,7 @@ class UsuarioController extends Controller{
     }
 
     /* Função para Redirecionameto da Tela Home do Operador */
-    public function homeOp()
+    public function homeOp(Request $request)
     {
         if($this->checarSessao() && $this->checarAdm() || $this->checarSessao() && $this->checarOp()){
             $user_id = session('id');
@@ -511,10 +545,18 @@ class UsuarioController extends Controller{
             $atribuicao = Atribuicoe::all();
             $topicos = Topico::all();
             $usuarios = User::all();
-            $chamado = Chamado::all();
             $chat = Interacoe::all();
             $tempo = Tempo::all();
             $relacionamentos = Relacionamento::all();
+
+            $chamados = new Chamado;
+            if(empty($request->search)){
+                $limpafiltro = false;
+                $chamado = Chamado::all();
+            }else{
+                $limpafiltro = true;
+                $chamado = $chamados->pesquisa($request->search);
+            }
 
             $contagemadpop = 0;
             $chamadosdpop= array();
@@ -546,6 +588,7 @@ class UsuarioController extends Controller{
             }
             
             $data = [
+                'limpafiltro' => $limpafiltro,
                 'contagematributoop' => $contagematributoop,
                 'chamadosatributoop' => $chamadosatributoop,
                 'contagemadpop' => $contagemadpop,
@@ -665,7 +708,7 @@ class UsuarioController extends Controller{
     }
 
     /* Função para Redirecionameto da Tela de Chamados Finalizados do Operador/Adm */
-    public function finalizadosAdm()
+    public function finalizadosAdm(Request $request)
     {
         if($this->checarSessao()){
             $erro = session('erroChat');
@@ -678,6 +721,15 @@ class UsuarioController extends Controller{
             $topicos = Topico::all();
             $usuarios = User::all();
             $chat = Interacoe::all();
+
+            $chamados = new Chamado;
+            if(empty($request->search)){
+                $limpafiltro = false;
+                $chamado = Chamado::all();
+            }else{
+                $limpafiltro = true;
+                $chamado = $chamados->pesquisaFim($request->search);
+            }
 
             $contfinaladm = 0;
             $finaladm = array();
@@ -700,6 +752,7 @@ class UsuarioController extends Controller{
             }
 
             $data = [
+                'limpafiltro' => $limpafiltro,
                 'errofinaladm' => $errofinaladm,
                 'contfinaladmarc' => $contfinaladmarc,
                 'finaladmarc' => $finaladmarc,

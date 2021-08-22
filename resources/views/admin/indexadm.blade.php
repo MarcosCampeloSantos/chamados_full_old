@@ -50,6 +50,23 @@
             @endif
             
             <button onclick="refresh()" class="btn m-2 ms-3"><i class="fas fa-sync-alt"></i></button>
+
+            <nav class="navbar navbar-light">
+                <div class="container-fluid">
+                  <form class="d-flex" method="POST" action="{{route('homeAdm')}}">
+                    @csrf
+                    <input class="form-control me-2" name="search" type="search" placeholder="Filtro" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+                  </form>
+                  @if ($limpafiltro == true)
+                    <form class="d-flex" method="POST" action="{{route('homeAdm')}}">
+                        @csrf
+                        <input class="form-control me-2" name="search" type="hidden" value="" aria-label="Search">
+                        <button class="btn btn-danger ms-1" type="submit">Limpar</button>
+                    </form>
+                  @endif
+                </div>
+            </nav>
         </div>
     </nav>
 </div>
@@ -324,12 +341,14 @@
                             <div>
                                 <form action="{{route('envchat')}}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    @if ($item->status_id == '2' || $item->status_id == '3' || $item->status_id == '5')
-                                        @php
-                                            $cont = array();
-                                            array_push($cont, $item->id);
-                                        @endphp
-                                        <textarea id="txtArtigo" type="text" class="chat{{$item->id}} form-label w-100 mt-2 text-break p-2" rows="3" name="chat" placeholder="Digite o Aqui..."></textarea>
+                                    @if ($item->status_id != '4')
+                                        @if ($item->status_id != '2')
+                                            @php
+                                                $cont = array();
+                                                array_push($cont, $item->id);
+                                            @endphp
+                                            <textarea id="txtArtigo" type="text" class="chat{{$item->id}} form-label w-100 mt-2 text-break p-2" rows="3" name="chat" placeholder="Digite o Aqui..."></textarea>
+                                        @endif
                                     @endif
                                     @if ($item->status_id == '5' || $item->status_id == '3')
                                         <input class="form-control w-50 mt-2" name="anexo" type="file" id="formFile">
@@ -375,50 +394,6 @@
                 </div>
             </div>
         </div>
-
-		<script>
-            var teste = <?php if(isset($cont)){echo json_encode($cont);} ?>;
-            function teste1(item){
-                ClassicEditor
-                .create( document.querySelector( '.chat'+item ), {
-                    toolbar: {
-					items: [
-						'heading',
-						'fontFamily',
-						'fontSize',
-						'|',
-						'bold',
-						'italic',
-						'bulletedList',
-						'numberedList',
-						'fontBackgroundColor',
-						'fontColor',
-						'removeFormat',
-						'|',
-						'outdent',
-						'indent',
-						'alignment',
-						'|',
-						'undo',
-						'redo'
-					]
-				},
-				language: 'pt-br',
-					licenseKey: '',			
-				} )
-				.then( editor => {
-					window.editor = editor;
-				} )
-				.catch( error => {
-					console.error( 'Oops, something went wrong!' );
-					console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-					console.warn( 'Build id: oevj7xtxj0l9-uxkzi3ishqrq' );
-					console.error( error );
-                } );
-            }
-            teste.forEach(teste1);
-		</script>
-
         @isset($erroChat)
             @isset($chatid)
                 <input type="hidden" value="{{$chatid}}" id="finalmente">
@@ -432,6 +407,62 @@
             @endisset
         @endisset
     @endforeach
+    <script>
+        var teste = <?php if(isset($cont)){echo json_encode($cont);} ?>;
+        
+        function Foo (vetor) {
+            var dicionario = {};
+            for (var i = 0; i < vetor.length; i++) {
+                dicionario[vetor[i] + ""] = true;
+            }
+            var novoVetor = [];
+            for (var chave in dicionario) {
+                novoVetor.push(chave);
+            }
+            return novoVetor;
+        }
+
+        function teste1(item){
+            ClassicEditor
+            .create( document.querySelector( '.chat'+item ), {
+                toolbar: {
+                items: [
+                    'heading',
+                    'fontFamily',
+                    'fontSize',
+                    '|',
+                    'bold',
+                    'italic',
+                    'bulletedList',
+                    'numberedList',
+                    'fontBackgroundColor',
+                    'fontColor',
+                    'removeFormat',
+                    '|',
+                    'outdent',
+                    'indent',
+                    'alignment',
+                    '|',
+                    'undo',
+                    'redo'
+                ]
+            },
+            language: 'pt-br',
+                licenseKey: '',			
+            } )
+            .then( editor => {
+                window.editor = editor;
+            } )
+            .catch( error => {
+                console.error( 'Oops, something went wrong!' );
+                console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+                console.warn( 'Build id: oevj7xtxj0l9-uxkzi3ishqrq' );
+                console.error( error );
+            } );
+        }
+       
+        teste.forEach(teste1); 
+    </script>
 </div>
 @endsection
     

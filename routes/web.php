@@ -27,7 +27,7 @@ Route::get('/homeAdm','usuariocontroller@homeAdm')->name('homeAdm'); #Tela Home 
 Route::get('/sair','usuariocontroller@sair')->name('sair'); #Deslogar do Usuario
 Route::get('/paineladm','usuariocontroller@painelAdm')->name('paineladm'); #Deslogar do Usuario
 Route::get('/finalizados','usuariocontroller@finalizados')->name('finalizados'); #Tela de Chamados finalizados
-Route::get('/finalizadosadm','usuariocontroller@finalizadosAdm')->name('finalizadosadm'); #Tela de Chamados finalizados
+Route::get('/finalizadosadm','usuariocontroller@finalizadosAdm')->name('finalizadosadm'); #Tela de Chamados finalizados ADM / OP
 Route::get('/homeSup','usuariocontroller@homeSup')->name('homeSup'); #Tela Home do Supervisor
 Route::get('/homeOp','usuariocontroller@homeOp')->name('homeOp'); #Tela Home do Operador
 
@@ -45,6 +45,9 @@ Route::post('/envchat','usuariocontroller@envChat')->name('envchat'); #Enviar me
 Route::post('/criar_rel','usuariocontroller@criarRel')->name('criar_rel'); #Criar Relacionamentro
 Route::post('/editar_rel','usuariocontroller@editarRel')->name('editar_rel'); #Editar Relacionamento
 Route::post('/adicionar_atributo','usuariocontroller@adicionarAtributo')->name('adicionar_atributo'); #Editar Atributo
+Route::post('/homeAdm','usuariocontroller@homeAdm')->name('homeAdm'); #Realizar Pesquisa no Filtro ADM
+Route::post('/homeOp','usuariocontroller@homeOp')->name('homeOp'); #Realizar Pesquisa no Filtro OP
+Route::post('/finalizadosadm','usuariocontroller@finalizadosAdm')->name('finalizadosadm'); #Realizar Pesquisa no Filtro Finalizados OP/ADM
 
 Route::post('/delete_atributo','excluircontroller@deleteAtributo')->name('delete_atributo'); #Deletar Atributo
 Route::post('/excluirdep','excluircontroller@excluirDep')->name('excluirdep'); #Deletar Departamento
@@ -52,3 +55,4 @@ Route::post('/excluirtop','excluircontroller@excluirTop')->name('excluirtop'); #
 Route::post('/excluirel','excluircontroller@excluiRel')->name('excluirel'); #Deletar Topico
 Route::post('/arquivo','usuariocontroller@arquivo')->name('arquivo'); #Arquivar Chamado
 Route::post('/excluirarquivo','excluircontroller@excluirArquivo')->name('excluirarquivo'); #Excluit Chamado do Arquivo
+
