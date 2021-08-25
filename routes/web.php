@@ -5,6 +5,7 @@ use App\Http\Controllers\ExcluirController;
 use App\Mail\SendMails;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,4 +56,7 @@ Route::post('/excluirtop','excluircontroller@excluirTop')->name('excluirtop'); #
 Route::post('/excluirel','excluircontroller@excluiRel')->name('excluirel'); #Deletar Topico
 Route::post('/arquivo','usuariocontroller@arquivo')->name('arquivo'); #Arquivar Chamado
 Route::post('/excluirarquivo','excluircontroller@excluirArquivo')->name('excluirarquivo'); #Excluit Chamado do Arquivo
+
+
+Route::get('/requestAjax', 'usuariocontroller@teste');
 

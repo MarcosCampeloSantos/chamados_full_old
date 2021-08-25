@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class UsuarioController extends Controller{
 
@@ -486,6 +487,8 @@ class UsuarioController extends Controller{
                 }
             }
 
+            
+
             $contagematributoadm = 0;
             $chamadosatributoadm = array();
             foreach ($chamado as $key) {
@@ -523,11 +526,21 @@ class UsuarioController extends Controller{
                 'chamado'=> $chamado,
                 'usuarios'=> $usuarios
             ];
+
             return view('admin.indexadm', $data);
         }elseif($this->checarSessao() && !$this->checarAdm()){
             return redirect()->route('homeUser');
         }else{
             return redirect()->route('loginUser');
+        }
+        
+    }
+
+    public function teste()
+    {
+        if(FacadesRequest::ajax()){
+            $chamados = Chamado::all();
+            return $chamados;
         }
         
     }
