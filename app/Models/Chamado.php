@@ -11,8 +11,13 @@ class Chamado extends Model
 
     public function pesquisa($filter)
     {   
-        $query = Chamado::where(function($query) use ($filter){
-            $query->where('title','LIKE', "%{$filter}%");
+        $query_2 = Interacoe::where(function($q_2) use ($filter){
+            
+        })->paginate();
+
+        $query = Chamado::where(function($q) use ($filter){
+            $q->where('title','LIKE', "%".$filter."%");
+            $q->orWhere('id','LIKE', "%".$filter."%");
         })->paginate();
 
         return $query;
@@ -20,7 +25,10 @@ class Chamado extends Model
 
     public function pesquisaFim($filter)
     {   
-        $query = Chamado::where('title','LIKE', "%{$filter}%")->where('status_id', '2')->paginate();
+        $query = Chamado::where(function($q) use ($filter){
+            $q->where('title','LIKE', "%".$filter."%")->where('status_id', '2');
+            $q->orWhere('id','LIKE', "%".$filter."%")->where('status_id', '2');
+        })->paginate();
 
         return $query;
     }
