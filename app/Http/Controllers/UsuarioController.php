@@ -539,8 +539,9 @@ class UsuarioController extends Controller{
     public function teste()
     {
         if(FacadesRequest::ajax()){
-            $chamados = Chamado::all();
-            return $chamados;
+            $teste = Chamado::all();
+            
+            return $teste;
         }
         
     }

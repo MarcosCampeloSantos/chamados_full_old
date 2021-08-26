@@ -6,9 +6,10 @@ function voltar() {
     window.history.go(-1)
 }
 
-$(document).ready(function(){
+function teste(){
     $.get('requestAjax', function(data){
         console.log(data);
     })
-})
+}
 
+setInterval(teste, 1000);
