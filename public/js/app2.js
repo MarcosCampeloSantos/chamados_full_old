@@ -8,7 +8,17 @@ function voltar() {
 
 function teste(){
     $.get('requestAjax', function(data){
-        console.log(data);
+        var dados = JSON.stringify(data);
+
+        $.ajax({
+            url: '../resources/teste.php',
+            type: 'POST',
+            data: {data: dados},
+            success: function(result){
+              // Retorno se tudo ocorreu normalmente
+              console.log(result);
+            }
+        });
     })
 }
 

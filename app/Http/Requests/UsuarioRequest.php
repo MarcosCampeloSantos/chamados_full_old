@@ -15,6 +15,7 @@ class UsuarioRequest extends FormRequest
             'cria_email' => 'required',
             'senha' => 'required|min:6|confirmed',
             'senha_confirmation' => 'required'
+            
         ];
     }
 
@@ -29,7 +30,6 @@ class UsuarioRequest extends FormRequest
             'senha.min' => 'A senha deve ter no minimo :min caracteres!',
             'senha_confirmation.required' => 'O Campo de Confirmação de Senha é Obrigatorio!',
             'senha.confirmed' => 'As senhas não correspondem'
-
         ];
     }
 }
